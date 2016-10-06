@@ -1,4 +1,5 @@
 #include <stdio.h>
+int indexOf(char str[], char c);
 
 /* testing */
 int main(int argc, char const *argv[]) {
