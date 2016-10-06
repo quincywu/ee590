@@ -7,4 +7,4 @@ reverse: reverse.c
 	gcc -o reverse reverse.c
 
 clean:
-	rm -f detab *.o
+	rm -f detab reverse *.o
