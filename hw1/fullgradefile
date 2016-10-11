@@ -1,0 +1,152 @@
+
+
+######## QUESTION 1a #######
+INPUT : ./detab q1.txt 1
+OUTPUT:  this is question 1
+checking q 1
+
+ANSWER:  this is question 1
+checking q 1
+
+
+Q1a SCORE:  2
+
+
+######## QUESTION 1b #######
+INPUT : ./detab q1.txt 8
+OUTPUT:  this        is question 1
+checking        q 1
+
+ANSWER:  this        is question 1
+checking        q 1
+
+
+Q1b SCORE:  2
+
+
+######## QUESTION 1c #######
+INPUT : ./detab q1.txt 0
+OUTPUT:  thisis question 1
+checkingq 1
+
+ANSWER:  thisis question 1
+checkingq 1
+
+
+Q1c SCORE:  2
+
+
+######## QUESTION 1d #######
+INPUT : ./detab q1.txt 0
+OUTPUT:  hi  this is a test.
+  hi this   is also a  test.
+
+
+ANSWER:  hi  this is a test.
+   hi this   is also a  test.
+
+
+
+Q1d SCORE:  2
+
+
+######## QUESTION 2a #######
+INPUT : ./reverse q2.txt
+OUTPUT:
+
+
+.tset	a osla si   siht ih	
+.tset a si siht	ih
+ANSWER:
+
+
+.tset	a osla si   siht ih	
+.tset a si siht	ih
+Q2a SCORE:  2
+
+
+######## QUESTION 2b #######
+INPUT : ./reverse q2b.txt
+OUTPUT:
+
+,tema tis rolod muspi meroL .sraeb
+ 000,3 tuoba evah		
+ew dnalsi kaidok no ereH
+ANSWER:
+
+,tema tis rolod muspi meroL .sraeb
+ 000,3 tuoba evah
+ew dnalsi kaidok no ereH
+Q2b SCORE:  2
+
+
+######## QUESTION 2c #######
+INPUT : ./reverse abc.csv
+OUTPUT:
+
+3,2,3
+3,1,3
+3,3,1
+2
+cba
+ANSWER:
+
+3,2,3
+3,1,3
+3,3,1
+2
+cba
+Q2c SCORE:  2
+
+
+######## QUESTION 2d #######
+INPUT : ./reverse shakespeare.txt
+OUTPUT:
+
+.'novA fo draB' eht dna ,teop lanoitan s'dnalgnE
+ dellac netfo si eH .tsitamard tnenime-erp s'dlrow eht dna
+ egaugnal hsilgnE eht ni retirw tsetaerg eht sa dedrager ylediw
+ ,rotca dna ,thgirwyalp ,teop hsilgnE na saw eraepsekahS mailliW
+ANSWER:
+
+.'novA fo draB' eht dna ,teop lanoitan s'dnalgnE
+ dellac netfo si eH .tsitamard tnenime-erp s'dlrow eht dna
+ egaugnal hsilgnE eht ni retirw tsetaerg eht sa dedrager ylediw
+ ,rotca dna ,thgirwyalp ,teop hsilgnE na saw eraepsekahS mailliW
+Q2d SCORE:  2
+
+
+######## QUESTION 3a #######
+INPUT : ./fsm abc.csv abbbc
+OUTPUT:  accept
+
+ANSWER:  accept
+Q3a SCORE:  2
+
+
+######## QUESTION 3b #######
+INPUT : ./fsm fsm.csv -0..6
+OUTPUT:  reject
+
+ANSWER:  reject
+Q3b SCORE:  2
+
+
+######## QUESTION 3c #######
+INPUT : ./fsm hex.csv x003ab
+OUTPUT:  accept
+
+ANSWER:  accept
+Q3c SCORE:  2
+
+
+######## QUESTION 3d #######
+INPUT : ./fsm hex.csv 3xab
+OUTPUT:  reject
+
+ANSWER:  reject
+Q3d SCORE:  2
+
+###########################
+
+TOTAL SCORE =  24 /24
