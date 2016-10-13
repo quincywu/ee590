@@ -15,11 +15,13 @@ void pop ( char *filename ) {
     }
 
     int counter = 0;
-    char str[MAX_CHAR];
+    char c, str[MAX_CHAR];
     FILE *fr = fopen (filename, "w+");
     FILE *f_old = fopen( temp_file, "r");
 
     if( f_old != NULL ) {
+        /*while ( (c = fgetc(f_old)) != EOF) {
+        }*/
 
         while ( (fscanf(f_old, "%s", str)) != EOF ) { // can ch be \t, \n or space
 

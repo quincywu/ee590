@@ -187,8 +187,8 @@ Matrix * matrix_cofactor ( Matrix * M ){
             }
 
             matrix_set( F, k, p, pow( -1, k+p ) * matrix_det( P ) );
-            printf("this is minor of k = %d, p = %d\n", k, p);
-            matrix_print( P ); NL;
+            /*printf("this is minor of k = %d, p = %d\n", k, p);
+            matrix_print( P ); NL;*/
 
         }
     }
@@ -207,18 +207,18 @@ Matrix * matrix_inverse ( Matrix * M ){
     Matrix * N = matrix_new ( M->rows, M->columns );
     /* 2 ways of doing the same problem */
     /* 1: Matrix of minors */
-    printf("Matrix det = %f\n", matrix_det(M) );
+    /*printf("Matrix det = %f\n", matrix_det(M) );
 
     printf("Matrix cofactor = \n" );
-    matrix_print ( matrix_cofactor(M) ); NL;
+    matrix_print ( matrix_cofactor(M) ); NL;*/
     N  = matrix_scale(matrix_transpose( matrix_cofactor(M) ), (double)(1/matrix_det(M)) );
 
-    printf("Matrix N = \n" );
+    /*printf("Matrix N = \n" );
     matrix_print(N);NL;
     printf( "M x N = \n" );
-    matrix_print(matrix_mult( M, N));NL;
+    matrix_print(matrix_mult( M, N));NL; */
 
-    ASSERT(!matrix_equal(matrix_mult( M, N), matrix_identity(M->rows)));
+    //ASSERT(!matrix_equal(matrix_mult( M, N), matrix_identity(M->rows)));
 
     return N;
 }
