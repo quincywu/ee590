@@ -1,3 +1,28 @@
+IGNORE THIS FOLDER GO TO PROB 6 !!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 This is prob 5.
 Copy the ee590/lec2 code into your prob5 directory, make and then run ./example. Implement the following methods to the matrix library.
 
