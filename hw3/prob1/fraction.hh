@@ -25,28 +25,28 @@ public:
 	// Named constructors
 	
 	// The copy constructor
-	fraction ( const fraction &m );
-	fraction& operator=(int top);
+	fraction ( const fraction &f );
+	fraction operator=(int top); //fraction& operator=(int top);
 	
 	// Getters 
 	int getNum() const { return num; };
 	int getDen() const { return den; };
 	
 	// Operations
-	double reduce_fraction ( fraction c ) const;
+	fraction reduce_fraction ( const fraction &f ) const;
 	
 	fraction add ( const fraction &f ) const;
 	fraction subtract ( const fraction &f ) const;
 	fraction mult ( const fraction &f ) const;
 	fraction divide ( const fraction &f ) const;
 	
-	void scale ( double d );
-	bool equals ( const fraction &f ) const;
+	bool equals ( const fraction &f ) const { return (num == f.num && den == f.den); };
 	bool less_than ( const fraction &f ) const;
 	
 	inline fraction operator+(const fraction &f) { return add(f); }
-	inline fraction operator-(const fraction &f) { fraction temp = f; temp.scale(-1); return add(temp); }
+	inline fraction operator-(const fraction &f) { fraction temp = f; temp.num *= -1; return add(temp); }
 	inline fraction operator*(const fraction &f) { return mult(f); }
+	inline fraction operator/(const fraction &f) { return divide(f); }
 	inline bool operator==(const fraction &f) { return equals(f); }
 	inline bool operator!=(const fraction &f) { return !equals(f); }
 
@@ -60,6 +60,7 @@ public:
 private:
 	int num,
 		den;
+	fraction private_reduce_fraction ();	
 		
 }
 

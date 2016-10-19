@@ -1,22 +1,32 @@
 #include <iostream>
 #include "fraction.hh"
 
-fraction::fraction ( int top, int bottom = 1 ) : num(top), den(bottom) {
-	
-	
-	
+/*fraction::fraction ( int top, int bottom = 1 ) : num(top), den(bottom) {
+	if ( bottom == 0 ){
+			throw fraction_exception("Attempted to initialize a fraction with 0 in the denominator");
+		}
+}*/
+
+fraction::~fraction() {
+	//not needed for primitive type
 }
 
-matrix::matrix ( int r, int c ) : num_rows(r), num_columns(c) {
+//copy constructor
+fraction::fraction (const fraction &f) {
+	num = f.num;
+	den = d.den;
+}
 
-  if ( r <= 0 || c <= 0 ) {
-    throw matrix_exception("Attempted to initialize a matrix with non-positive number of rows and/or columns");
-  }
+fraction fraction::operator=(int top){
+	num = top;
+	den = 1;
+	return *this;
+}
 
-  value = new double[r*c];
+std::ostream& operator<<(std::ostream& os, const fraction &f) {
 
-  for ( int i=0; i<r*c; i++ ) {
-    value[i] = 0.0;
-  }
+  os << f.num << "/" << f.den << std::endl;
+
+  return os;
 
 }
