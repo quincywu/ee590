@@ -51,7 +51,7 @@ public:
   inline bool operator<=(const matrix &m) { return less_than(m) || equals(m); }
   inline bool operator>=(const matrix &m) { return m.less_than(*this) || m.equals(*this); }
 
-  matrix minor ( int r, int c );
+  matrix m_minor ( int r, int c );
   matrix inverse();
   double det(void);
 

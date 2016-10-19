@@ -49,10 +49,10 @@ void matrix::scale ( double d ) {
   }
 }
 
-matrix matrix::minor ( int r, int c ) {
+matrix matrix::m_minor ( int r, int c ) {
 
   if ( !in_range(r,c) ) {
-    throw matrix_exception("Attempted to take minor with out of range indices");
+    throw matrix_exception("Attempted to take m_minor with out of range indices");
   }
 
   matrix p ( rows() - 1, columns() - 1 );
@@ -86,7 +86,7 @@ double matrix::det(void) {
     double sign = 1, sum = 0;
 
     for ( int i=0; i<columns(); i++ ) {
-      sum += sign * get(0,i) * minor(0,i).det();
+      sum += sign * get(0,i) * m_minor(0,i).det();
       sign *= -1;
     }
 
@@ -113,7 +113,7 @@ matrix matrix::inverse ( void ) {
   for ( int i=0; i<rows(); i++ ) {
     for ( int j=0; j<columns(); j++ ) {
       int sign = ( (i+j)%2 == 0 ) ? 1 : -1;
-      m.set(i,j,sign*minor(j,i).det()/d);
+      m.set(i,j,sign*m_minor(j,i).det()/d);
     }
   }
 

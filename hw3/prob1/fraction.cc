@@ -7,14 +7,10 @@
 		}
 }*/
 
-fraction::~fraction() {
-	//not needed for primitive type
-}
-
 //copy constructor
 fraction::fraction (const fraction &f) {
 	num = f.num;
-	den = d.den;
+	den = f.den;
 }
 
 fraction fraction::operator=(int top){
@@ -25,7 +21,7 @@ fraction fraction::operator=(int top){
 
 std::ostream& operator<<(std::ostream& os, const fraction &f) {
 
-  os << f.num << "/" << f.den << std::endl;
+  os << f.getNum() << "/" << f.getDen() << std::endl;
 
   return os;
 
