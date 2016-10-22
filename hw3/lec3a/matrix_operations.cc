@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include "matrix.hh"
-
+ 
 matrix matrix::add ( const matrix &m ) const {
 
   if ( rows() != m.rows() || columns() != m.columns() ) {
