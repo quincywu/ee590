@@ -1,21 +1,18 @@
 CXX = g++ -std=c++11 -O3
+LIBS = -lm -lfraction
+INCLUDE_DIRS = -I..
+LIBDIRS = -L..
 
-SOURCES = fraction.cc fraction_operations.cc
-HEADERS = fraction.hh
+SOURCES = 1.cc 2.cc 3.cc
+TARGETS = $(SOURCES:%.cc=%.x)
 
-OBJECTS=$(SOURCES:.cc=.o)
+all: $(TARGETS)
 
-LIB_FRACTION=libfraction.a
+%.x: %.cc ../libfraction.a
+	$(CXX) $(INCLUDE_DIRS) $(LIBDIRS) $< $(LIBS) -o $@
 
-all: $(LIB_FRACTION)
-	make -C test
-
-$(LIB_FRACTION): $(OBJECTS) $(HEADERS)
-	ar cr $(LIB_FRACTION) $(OBJECTS)
-
-%.o: %.c $(HEADERS)
-	$(CXX) -c $<
+test: $(TARGETS)
+	./test.sh
 
 clean:
-	rm -f $(OBJECTS) $(LIB_FRACTION)
-	make -C test clean
+	rm -rf $(TARGETS)
