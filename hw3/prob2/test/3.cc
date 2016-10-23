@@ -1,27 +1,32 @@
 #include "test.hh"
-#include "fraction.hh"
+#include "complex.hh"
+#include <math.h>
+
+#define EPSILSON 0.0001
 
 int main ( int argc, char * argv[] ) {
 
-  // OPERATION TEST
-  // This test check for the comparision relations. ==, !=, <, >, <=, >=
+  // CONJUGATE TEST, MAGNITUDE TEST, ANGLE TEST
 
-  fraction A ( 4, 5 ),
-           B ( 4, 5 ),
-           C ( 3, 4 );
+  // CONJUGATE TEST
+  complex A(3.5, 4.5),
+          B;
+  B = A.conjugate();
+  std::cout << "A = " << A;
+  std::cout << "B = " << B;
+  ASSERT ( B.getReal() == B.getReal() && A.getImg() == - B.getImg() );
 
-  ASSERT ( A == B );
+  // MAGNITUDE TEST
+  std::cout << "A.magnitude = " << A.magnitude() << std::endl;
+  std::cout << "B.magnitude = " << B.magnitude() << std::endl;
+  ASSERT ( A.magnitude() == B.magnitude() && fabs(A.magnitude() - 5.70088) < EPSILSON);
 
+  // ANGLE TEST
+  std::cout << "A.angle = " << A.angle() << std::endl;
+  std::cout << "B.angle = " << B.angle() << std::endl;
+  ASSERT ( fabs( A.angle() - (52.125 * M_PI/180) ) < EPSILSON );
+  ASSERT ( fabs( B.angle() - (-52.125 * M_PI/180) ) < EPSILSON );
 
-  A.set( 3, 4 );
-  B.set( 4, 5 );
-  ASSERT ( A != B );
-
-
-  ASSERT ( A < B );
-  ASSERT ( B > A );
-  ASSERT ( A >= C && B >= C );
-  ASSERT ( A <= C && C <= B );
-
+  SUCCEED;
 
 }

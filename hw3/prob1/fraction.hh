@@ -18,7 +18,7 @@ public:
 
 	// The copy constructor
 	fraction ( const fraction &f );
-	fraction &operator=(int top); //fraction& operator=(int top);
+	fraction& operator=(int top);
 
     // Setters
     void set(int top, int bottom);

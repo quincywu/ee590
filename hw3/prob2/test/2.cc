@@ -1,101 +1,95 @@
 #include "test.hh"
-#include "fraction.hh"
+#include "complex.hh"
+#include <math.h>
 
-#define MAXNUM 10000
+#define EPSILSON 0.0001
 
 int main ( int argc, char * argv[] ) {
 
   // OPERATION TEST, ADD, SUBTRACT, MULT, DIVIDE, POWER
   // This test check the mathamatica operations include add, subtract, multiplication,
-  // division, and power of fraction. All operations return in lowest term.
+  // division, and power of complex.
   // This test check on all operator overloaded, +, -, *, /,
-  // and '-' will negate a fraction.
+  // and '-' will negate a complex number.
 
-  fraction A(2, 5),
-           B(1, 10);
+  complex A(2.25, 56),
+          B(1.25, -10),
+          C;
 
-  int counter = 0;
   std::cout << "-----" << std::endl;
 
-  //addition A = 4/10 takes 6 addition of B to make it 10/10 = 1/1
+  //addition A = 2.25 + 56 i, B = 1.25 - 10 i, A+B = 3.5 + 46 i
   std::cout << "A = " << A ;
   std::cout << "B = " << B ;
-  while ( (A.getNum() != 1 || A.getDen() != 1) && counter < MAXNUM) {
-      A = A + B;
-      counter ++;
-      std::cout << "A = " << A ;
-  }
+  C = A + B;
+  std::cout << "A + B = " << C << std::endl;
+  ASSERT ( C.getReal() == 3.5 && C.getImg() == 46 && A.getReal() == 2.25 && A.getImg() == 56 && B.getReal() == 1.25 && B.getImg() == -10  );
 
-  ASSERT ( counter == 6 && A.getNum() == 1 && A.getDen() == 1 );
+
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
 
+  //subtraction A - B = 1 + 66 i
+  C = A - B;
+  std::cout << "A - B = " << C << std::endl;
+  ASSERT ( C.getReal() == 1 && C.getImg() == 66 );
 
-  //subtraction A = 16/10 takes 6 subtraction of B to make it 10/10 = 1/1
-  A.set(8, 5);
-  counter = 0;
-  std::cout << "A = " << A ;
 
-  while ( (A.getNum() != 1 || A.getDen() != 1) && counter < MAXNUM) {
-      A = A - B;
-      counter ++;
-      std::cout << "A = " << A ;
-  }
-  ASSERT ( counter == 6 && A.getNum() == 1 && A.getDen() == 1 );
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
 
+  //multiplication A =  multiply B = (3.2 + 2.2i) * (4.1 + 3.3i) = (5.86 + 19.58i)
+  A.set(3.2, 2.2);
+  B.set(4.1, 3.3);
+  C = A * B;
+  std::cout << "multiplication C = " << C ;
+  ASSERT ( fabs( C.getReal() - 5.86 ) < EPSILSON && fabs( C.getImg() - 19.58 ) < EPSILSON );
 
-  //multiplication A = 2/3 multiply B = 6/2 to make it 2/1
-  A.set(2, 3);
-  B.set(6, 2);
-  counter = 0;
-  A = A * B;
-  std::cout << "multiplication A = " << A ;
-  ASSERT ( A.getNum() == 2 && A.getDen() == 1 );
+
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
 
+  //division A / B = 0.73574... - 0.055595...i
+  C = A / B;
+  std::cout << "division C = " << C ;
+  ASSERT ( fabs( C.getReal() - 0.73574 ) < EPSILSON && fabs( C.getImg() - (-0.05559) ) < EPSILSON );
 
-  //division A = 2/3 divide B = 2/6 to make it 2
-  A.set(2, 3);
-  B.set(2, 6);
-  A = A / B;
-  std::cout << "division A = " << A ;
-  ASSERT ( A.getNum() == 2 && A.getDen() == 1 );
+
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
 
 
   //power
-  A.set(1, 2);
+  A.set(3, 4);
   B = A.power(0);
   std::cout << "B = " << B ;
-  ASSERT ( B.getNum() == 1 && B.getDen() == 1 );
+  ASSERT ( B.getReal() == 1 && B.getImg() == 0 );
 
   B = A.power(1);
   std::cout << "B = " << B ;
-  ASSERT ( B.getNum() == A.getNum() && B.getDen() == A.getDen() );
+  ASSERT ( B.getReal() == 3 && B.getImg() == 4 );
 
   B = A.power(-1);
   std::cout << "B = " << B ;
-  ASSERT ( B.getNum() == A.getDen() && B.getDen() == A.getNum() );
+  ASSERT ( fabs( B.getReal() - 0.12 ) < EPSILSON && fabs( B.getImg() - (-0.16) ) < EPSILSON );
 
+  A.set(0, 1);
   B = A.power(2);
   std::cout << "B = " << B ;
-  ASSERT ( B.getNum() == 1 && B.getDen() == 4 );
+  ASSERT ( B.getReal() == -1 && B.getImg() == 0 );
 
+  A.set(4.5, 5);
   B = A.power(-2);
   std::cout << "B = " << B ;
-  ASSERT ( B.getNum() == 4 && B.getDen() == 1 );
+  ASSERT ( fabs( B.getReal() - (-0.00231) ) < EPSILSON && fabs( B.getImg() - (-0.02197) ) < EPSILSON );
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
 
-  //negate a fraction
-  A.set(1,2);
+  //negate a complex
+  A.set(1.1,-2.2);
   A = -A;
   std::cout << "A = " << A ;
-  ASSERT ( A.getNum() == -1 && A.getDen() == 2 );
+  ASSERT ( fabs( A.getReal() - (-1.1) ) < EPSILSON && fabs( A.getImg() - 2.2 ) < EPSILSON );
 
 
   SUCCEED;

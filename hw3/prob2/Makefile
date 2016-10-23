@@ -1,21 +1,21 @@
 CXX = g++ -std=c++11 -O3
 
-SOURCES = fraction.cc fraction_operations.cc
-HEADERS = fraction.hh
+SOURCES = complex.cc complex_operations.cc
+HEADERS = complex.hh
 
 OBJECTS=$(SOURCES:.cc=.o)
 
-LIB_FRACTION=libfraction.a
+LIB_COMPLEX=libcomplex.a
 
-all: $(LIB_FRACTION)
+all: $(LIB_COMPLEX)
 	make -C test
 
-$(LIB_FRACTION): $(OBJECTS) $(HEADERS)
-	ar cr $(LIB_FRACTION) $(OBJECTS)
+$(LIB_COMPLEX): $(OBJECTS) $(HEADERS)
+	ar cr $(LIB_COMPLEX) $(OBJECTS)
 
 %.o: %.c $(HEADERS)
 	$(CXX) -c $<
 
 clean:
-	rm -f $(OBJECTS) $(LIB_FRACTION)
+	rm -f $(OBJECTS) $(LIB_COMPLEX)
 	make -C test clean

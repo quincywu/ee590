@@ -26,14 +26,17 @@ int main ( int argc, char * argv[] ) {
   std::cout << "A = " << A;
   ASSERT ( A.getNum() == 2 && A.getDen() == 3 );
 
+  // test for the copy constructor
   fraction D = A;
   std::cout << "D = " << D;
   ASSERT ( D.getNum() == 2 && D.getDen() == 3 );
 
+  // test for the overloaded operator =
   D = 6;
   std::cout << "D = " << D;
   ASSERT ( D.getNum() == 6 && D.getDen() == 1 );
 
+  // check the reduce fraction function reduce to the lowest term
   A.set( 4, 6 );
   B = A.reduce_fraction();
   std::cout << "A = " << A ;

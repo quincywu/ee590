@@ -1,44 +1,39 @@
 #include "test.hh"
-#include "fraction.hh"
+#include "complex.hh"
 
 int main ( int argc, char * argv[] ) {
 
-  // CONSTRUCTOR TESTS, SETTERS AND GETTERS cHECK, COPY CONSTRUCTOR TEST
-  // This file tests all constructors by building a fraction with each and then
-  // testing that the fraction is the right size and/or that values in the fraction,
+  // CONSTRUCTOR TESTS, SETTERS AND GETTERS CHECK, COPY CONSTRUCTOR TEST
+  // This file tests all constructors by building a complex number with each and then
+  // testing that values in the complex number,
   // using get, are what they should be.
-  // also check for the reduce fraction to reduce to lowest term
 
-  // TEST 1: check that a default constructor is made with 0/1
-  fraction A;
+  // TEST 1: check that a default constructor is made with 0/0
+  complex A;
   std::cout << "A = " << A;
-  ASSERT ( A.getNum() == 0 && A.getDen() == 1 );
+  ASSERT ( A.getReal() == 0 && A.getImg() == 0 );
 
-  // TEST 2: check a fraction has numerator and denominator
-  fraction B(4),
-           C(-2,5);
+  // TEST 2: check a complex has real and imaginary part
+  complex B(4.2),
+           C(-2,-5.3);
   std::cout << "B = " << B;
   std::cout << "C = " << C;
-  ASSERT ( B.getNum() == 4 && B.getDen() == 1 );
-  ASSERT ( C.getNum() == -2 && C.getDen() == 5 );
+  ASSERT ( B.getReal() == 4.2 && B.getImg() == 0 );
+  ASSERT ( C.getReal() == -2 && C.getImg() == -5.3 );
 
-  A.set(2,3);
+  A.set(2.9,3.44);
   std::cout << "A = " << A;
-  ASSERT ( A.getNum() == 2 && A.getDen() == 3 );
+  ASSERT ( A.getReal() == 2.9 && A.getImg() == 3.44 );
 
-  fraction D = A;
+  // check the copy constructor
+  complex D = A;
   std::cout << "D = " << D;
-  ASSERT ( D.getNum() == 2 && D.getDen() == 3 );
+  ASSERT ( D.getReal() == 2.9 && D.getImg() == 3.44 );
 
-  D = 6;
+  // check the overloaded operator = 
+  D = 6.314;
   std::cout << "D = " << D;
-  ASSERT ( D.getNum() == 6 && D.getDen() == 1 );
-
-  A.set( 4, 6 );
-  B = A.reduce_fraction();
-  std::cout << "A = " << A ;
-  std::cout << "B = " << B ;
-  ASSERT ( A.getNum() == 4 && A.getDen() == 6 && B.getNum() == 2 && B.getDen() == 3 );
+  ASSERT ( D.getReal() == 6.314 && D.getImg() == 0 );
 
   SUCCEED;
 
