@@ -98,11 +98,11 @@ int main ( int argc, char * argv[] ) {
 
     try {
         matrix<double> D(3,4), E(4,5);
+		std::cout << "Adding matrix of different size should fail at 1.cc line 11;" << std::endl;
         A = D.add(E);
-        std::cout << "Adding matrix of different size fail at 1.cc line 11;" << std::endl;
         FAIL;
     } catch ( matrix_exception &e ) {
-        std::cout << "successfully catch erro of adding matrix of 2 different size,"
+        std::cout << "successfully catch error of adding matrix of 2 different size,"
         ASSERT ( e );
     }
 
@@ -131,6 +131,7 @@ int main ( int argc, char * argv[] ) {
     }
 
     // check equals, less than and greater than
+	std::cout << "---Test operator, equals, less than and greater than ---"  << std::endl;
     ASSERT ( A.equals(B) );
     ASSERT ( A == B );
     ASSERT ( A != C );
@@ -140,10 +141,12 @@ int main ( int argc, char * argv[] ) {
     ASSERT ( B <= C );
 
     // check minor
+	std::cout << "---Minor test---"  << std::endl;
     matrix<double> Y = A.m_minor(0,0);
     ASSERT ( Y.get(0,0) == 1.2 && Y.get(0,1) == 3.5 && Y.get(1,0) == -1 && Y.get(1,1) == -1.5 );
 
     // check inverse
+	std::cout << "---test inverse ---"  << std::endl;
     B = A * (A.inverse()); // B = A * A^-1 = I
     matrix<double> K = A.identity(3),
                    eps = matrix::ones(4,4);
@@ -153,11 +156,25 @@ int main ( int argc, char * argv[] ) {
     ASSERT ( I - eps <= B && M <= I + eps );
 
     // check determinant
-    
-
-
-
-
+	std::cout << "---test determinant ---"  << std::endl;
+    ASSERT ( A.det() == 10.31 );
+	ASSERT ( I.det() == 1 && K.det() == 1 );
+	
+	// A.det() == 0
+	B.set(0, 0, 1); B.set(0, 1, 2); B.set(0, 2, 3);
+    B.set(1, 0, 4); B.set(1, 1, 5); B.set(1, 2, 6);
+    B.set(2, 0, 7); B.set(2, 1, 8); B.set(2, 2, 9);
+	ASSERT( B.det == 0 );
+	
+	try {
+        std::cout << "Adding matrix of different size should fail at 1.cc line 11;" << std::endl;
+		B.inverse();
+        FAIL;
+    } catch ( matrix_exception &e ) {
+        std::cout << "successfully catch error of getting inverse of det(0), singlular matrix"
+        ASSERT ( e );
+    }
+	
     SUCCEED;
 
 }
