@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <math.h>
 
 #define EPSILSON 0.0001
 

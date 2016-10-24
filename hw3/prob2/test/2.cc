@@ -45,6 +45,10 @@ int main ( int argc, char * argv[] ) {
   std::cout << "multiplication C = " << C ;
   ASSERT ( fabs( C.getReal() - 5.86 ) < EPSILSON && fabs( C.getImg() - 19.58 ) < EPSILSON );
 
+  C = A * 6.6;
+  std::cout << "6.6 * A = " << C ;
+  ASSERT ( fabs( C.getReal() - 21.12 ) < EPSILSON && fabs( C.getImg() - 14.52 ) < EPSILSON );
+
 
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
