@@ -103,7 +103,7 @@ int main ( int argc, char * argv[] ) {
     //check subtraction
     std::cout << "---subtraction---" << std::endl;
     matrix<int> Z = A - B;
-    std::cout << "C = " << std::endl << C;
+    std::cout << "Z = " << std::endl << Z;
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
         ASSERT ( Z.get(i,j) == 0 );
