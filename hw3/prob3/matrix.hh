@@ -46,6 +46,8 @@ public:
   inline bool operator==(const matrix &m) { return equals(m); }
   inline bool operator!=(const matrix &m) { return !equals(m); }
 
+  inline matrix operator*(double d) { matrix temp = *this; temp.scale(d); return temp;}
+
   inline bool operator<(const matrix &m) { return less_than(m); }
   inline bool operator>(const matrix &m) { return m.less_than(*this); }
   inline bool operator<=(const matrix &m) { return less_than(m) || equals(m); }

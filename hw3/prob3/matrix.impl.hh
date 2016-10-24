@@ -153,7 +153,7 @@ template <class T>
 matrix<T> matrix<T>::mult ( const matrix &m ) const {
 
   if ( rows() != m.rows() || columns() != m.columns() ) {
-    throw matrix_exception("Attemped to add matrices with incompatible sizes");
+    throw matrix_exception("Attemped to mult matrices with incompatible sizes");
   }
 
   matrix M(rows(),m.columns());
@@ -260,7 +260,7 @@ T matrix<T>::det(void) {
 }
 
 template <class T>
-matrix matrix::inverse ( void ) {
+matrix<T> matrix<T>::inverse ( void ) {
 
   matrix m(rows(),columns());
 
