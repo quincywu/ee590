@@ -15,8 +15,8 @@ bool main ( bool argc, char * argv[] ) {
 
     matrix<bool> I = matrix<bool>::identity(4);
 	std::cout << "I(4) = " << std::endl << I;
-    for ( bool i=0; i<4; i++ ) {
-      for ( bool j=0; j<4; j++ ) {
+    for ( int i=0; i<4; i++ ) {
+      for ( int j=0; j<4; j++ ) {
         ASSERT ( ( i == j && I.get(i,j) == true ) || ( i!=j && I.get(i,j) == false ) );
       }
     }
@@ -24,8 +24,8 @@ bool main ( bool argc, char * argv[] ) {
     // Check that a matrix of ones is a matrix of ones.
     matrix<bool> O = matrix<bool>::ones(5,6);
 	std::cout << "Ones(5,6) = " << std::endl << O;
-    for ( bool i=0; i<5; i++ ) {
-      for ( bool j=0; j<6; j++ ) {
+    for ( int i=0; i<5; i++ ) {
+      for ( int j=0; j<6; j++ ) {
         ASSERT ( O.get(i,j) == true );
       }
     }
@@ -42,8 +42,8 @@ bool main ( bool argc, char * argv[] ) {
     matrix<bool> B = A;
     std::cout << "A = " << std::endl << A;
     std::cout << "B = " << std::endl << B;
-    for ( bool i=0; i<3; i++ ) {
-      for ( bool j=0; j<3; j++ ) {
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
         ASSERT ( B.get(i,j) == A.get(i,j) );
       }
     }
@@ -54,8 +54,8 @@ bool main ( bool argc, char * argv[] ) {
     matrix<bool> C = A * 2;
     std::cout << "A = " << std::endl << A;
     std::cout << "C = " << std::endl << C;
-    for ( bool i=0; i<3; i++ ) {
-      for ( bool j=0; j<3; j++ ) {
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
         ASSERT ( C.get(i,j) == 2*(A.get(i,j)) );
       }
     }
@@ -64,8 +64,8 @@ bool main ( bool argc, char * argv[] ) {
     C.scale(-2);
     std::cout << "A = " << std::endl << A;
     std::cout << "C = " << std::endl << C;
-    for ( bool i=0; i<3; i++ ) {
-      for ( bool j=0; j<3; j++ ) {
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
         ASSERT ( C.get(i,j) == -2*(A.get(i,j)) );
       }
     }
@@ -76,16 +76,16 @@ bool main ( bool argc, char * argv[] ) {
     std::cout << "---addition---" << std::endl;
     C = A.add(B);
     std::cout << "C = " << std::endl << C;
-    for ( bool i=0; i<3; i++ ) {
-      for ( bool j=0; j<3; j++ ) {
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
         ASSERT ( C.get(i,j) == A.get(i,j) + B.get(i,j) );
       }
     }
 
     C = A + B;
     std::cout << "C = " << std::endl << C;
-    for ( bool i=0; i<3; i++ ) {
-      for ( bool j=0; j<3; j++ ) {
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
         ASSERT ( C.get(i,j) == A.get(i,j) + B.get(i,j) );
       }
     }
@@ -106,8 +106,8 @@ bool main ( bool argc, char * argv[] ) {
     std::cout << "---subtraction---" << std::endl;
     matrix<bool> Z = A - B;
     std::cout << "Z = " << std::endl << Z;
-    for ( bool i=0; i<3; i++ ) {
-      for ( bool j=0; j<3; j++ ) {
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
         ASSERT ( Z.get(i,j) == false );
       }
     }
