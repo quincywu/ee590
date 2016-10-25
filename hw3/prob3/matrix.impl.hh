@@ -175,7 +175,7 @@ template <class T>
 void matrix<T>::scale ( double d ) {
   for ( int i=0; i<rows(); i++ ) {
     for ( int j=0; j<columns(); j++ ) {
-      set(i,j,(T) (d*get(i,j)) );
+      set(i,j,(T) (get(i,j) * d) );
     }
   }
 }
@@ -246,11 +246,10 @@ T matrix<T>::det(void) {
 
   } else {
 
-    double sign = 1, sum = 0;
-
+    T sign = 1, sum = 0;
     for ( int i=0; i<columns(); i++ ) {
-      sum += sign * get(0,i) * m_minor(0,i).det();
-      sign *= -1;
+      sum  = sum +  ( sign * get(0,i) * m_minor(0,i).det() );
+      sign = sign * -1;
     }
 
     return sum;

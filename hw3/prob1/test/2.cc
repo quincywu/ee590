@@ -27,6 +27,15 @@ int main ( int argc, char * argv[] ) {
   }
 
   ASSERT ( counter == 6 && A.getNum() == 1 && A.getDen() == 1 );
+
+  fraction st (389, 100);
+  fraction nd (1, 10000);
+  fraction abc = (st + nd);
+  fraction asdf(3890100,1000000);
+  std::cout << "asdf = " << asdf ;
+  std::cout << "asdf.reduce_fraction = " << asdf.reduce_fraction() ;
+  ASSERT ( abc.getNum() == 38901 && abc.getDen() == 10000 );
+
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
 

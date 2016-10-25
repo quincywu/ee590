@@ -1,7 +1,9 @@
 #include "test.hh"
 #include "matrix.hh"
+#include "fraction.hh"
 
-#define EPSILSON 0.0001
+#define EPSILSON fraction(1,10000)
+#define EPSILSON_DECIMAL 0.0001
 
 int main ( int argc, char * argv[] ) {
 
@@ -30,12 +32,14 @@ int main ( int argc, char * argv[] ) {
     }
     std::cout << "Ones(5,6) = " << std::endl << O;
 
+    std::cout << "Test constructor, successful"  << std::endl;
+
     // check the copy constructor
     std::cout << "---copy constructor---"  << std::endl;
 
-    A.set(0, 0, 2.3); A.set(0, 1, 2); A.set(0, 2, 2.5);
-    A.set(1, 0, -3.2); A.set(1, 1, 1.2); A.set(1, 2, 3.5);
-    A.set(2, 0, 2); A.set(2, 1, -1); A.set(2, 2, -1.5);
+    A.set(0, 0, fraction(23,10)); A.set(0, 1, fraction(2)); A.set(0, 2, fraction(25,10));
+    A.set(1, 0, -fraction(32,10)); A.set(1, 1, fraction(12,10)); A.set(1, 2, fraction(35,10));
+    A.set(2, 0, fraction(20,10)); A.set(2, 1, fraction(-1)); A.set(2, 2, fraction(-15,10));
 
     matrix<fraction> B = A;
     std::cout << "A = " << std::endl << A;
@@ -46,14 +50,16 @@ int main ( int argc, char * argv[] ) {
       }
     }
 
+    std::cout << "Test copy constructor, successful"  << std::endl;
+
     //check scaling
     std::cout << "---scaling---" << std::endl;
-    matrix<fraction> C = A * 2.0;
+    matrix<fraction> C = A * 2;
     std::cout << "A = " << std::endl << A;
     std::cout << "C = " << std::endl << C;
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
-        ASSERT ( C.get(i,j) == 2*(A.get(i,j)) );
+        ASSERT ( C.get(i,j) == (A.get(i,j) * fraction(2) ) );
       }
     }
 
@@ -63,10 +69,11 @@ int main ( int argc, char * argv[] ) {
     std::cout << "C = " << std::endl << C;
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
-        ASSERT ( C.get(i,j) == -2.0*(A.get(i,j)) );
+        ASSERT ( C.get(i,j) == (A.get(i,j) * fraction(-2.0)) );
       }
     }
 
+    std::cout << "Test scaling, successful"  << std::endl;
 
     //check addition
     std::cout << "---addition---" << std::endl;
@@ -100,24 +107,41 @@ int main ( int argc, char * argv[] ) {
     //check subtraction
     std::cout << "---subtraction---" << std::endl;
     matrix<fraction> Z = A - B;
-    std::cout << "C = " << std::endl << C;
+    std::cout << "Z = " << std::endl << Z;
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
-        ASSERT ( Z.get(i,j) == 0 );
+          std::cout << "Z.get(i,j) = " << i << j << Z.get(i,j) - EPSILSON << std::endl;
+        ASSERT ( Z.get(i,j) == fraction(0) );
       }
     }
 
+    // TODO add more test
+
     // check multiplication
     std::cout << "---multiplication---" << std::endl;
-    C.set(0, 0, 3.89); C.set(0, 1, 4.5); C.set(0, 2, 9);
-    C.set(1, 0, -4.2); C.set(1, 1, -8.46); C.set(1, 2, -9.05);
-    C.set(2, 0, 4.8); C.set(2, 1, 4.3); C.set(2, 2, 3.75);
+    C.set(0, 0, fraction(3890,1000)); C.set(0, 1, fraction(45,10)); C.set(0, 2, fraction(9));
+    C.set(1, 0, -fraction(420,100)); C.set(1, 1, -fraction(846,100)); C.set(1, 2, -fraction(905,100));
+    C.set(2, 0, fraction(480,100)); C.set(2, 1, fraction(43,10)); C.set(2, 2, fraction(375,100));
+
     Z = A * B;
+    std::cout << "A = " << std::endl << A;
+    std::cout << "B = " << std::endl << B;
     std::cout << "C = " << std::endl << C;
     std::cout << "Z = " << std::endl << Z;
-    matrix<fraction> eps_3 = matrix<fraction>::ones(3,3);
-    eps_3.scale (EPSILSON); //accepted error margin
-    ASSERT ( Z - eps_3 <= C && C <= Z + eps_3 );
+
+    matrix<fraction> eps_3(3,3);
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
+        eps_3.set(i,j, EPSILSON );
+      }
+    }
+
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
+        ASSERT ( Z.get(i,j) == C.get(i,j).reduce_fraction() );
+      }
+    }
+
 
     // check equals, less than and greater than
 	std::cout << "---Test operator, equals, less than and greater than ---"  << std::endl;
@@ -125,10 +149,20 @@ int main ( int argc, char * argv[] ) {
     std::cout << "B = " << std::endl << B;
     C = matrix<fraction>::ones(3,3);
     C.scale(5);
+    std::cout << "C = " << std::endl << C;
     ASSERT ( A.equals(B) );
     ASSERT ( A == B );
     ASSERT ( A != C );
     ASSERT ( A >= B );
+
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
+          std::cout << "Bij = " << i << j << " "<< B.get(i,j) << std::endl;
+          std::cout << "C = "  << C.get(i,j) << std::endl;
+        ASSERT ( C.get(i,j) >= B.get(i,j).reduce_fraction() );
+      }
+    }
+
     ASSERT ( C >= B );
     ASSERT ( C > B );
     ASSERT ( A <= B );
@@ -139,7 +173,13 @@ int main ( int argc, char * argv[] ) {
     // check minor
 	std::cout << "---Minor test---"  << std::endl;
     matrix<fraction> Y = A.m_minor(0,0);
-    ASSERT ( Y.get(0,0) == 1.2 && Y.get(0,1) == 3.5 && Y.get(1,0) == -1 && Y.get(1,1) == -1.5 );
+    ASSERT ( Y.get(0,0) == fraction(12,10) && Y.get(0,1) == fraction(35,10) && Y.get(1,0) == fraction(-1) && Y.get(1,1) == fraction(-15,10) );
+
+    Y = A.m_minor(0,1);
+    ASSERT ( Y.rows() == 2 && Y.columns() == 2 && Y.get(0,0) == fraction(-32,10) && Y.get(0,1) == fraction(35,10) && Y.get(1,0) == fraction(20,10) && Y.get(1,1) == fraction(-15,10) );
+
+    Y = Y.m_minor(0,0); //A.m_minor(0,1).Y.m_minor(0,0)
+    ASSERT ( Y.rows() == 1 && Y.columns() == 1 && Y.get(0,0) == fraction(-15,10) );
     std::cout << "Test minor, successful"  << std::endl;
 
 
@@ -148,7 +188,7 @@ int main ( int argc, char * argv[] ) {
     B = A * (A.inverse()); // B = A * A^-1 = I
     matrix<fraction> K = A.identity(3);
 
-    ASSERT ( K - eps_3 <= B && B <= K + eps_3 );
+    ASSERT ( K == B && B == K);
 
     std::cout << "Test inverse, successful"  << std::endl;
 
@@ -156,7 +196,7 @@ int main ( int argc, char * argv[] ) {
 	std::cout << "---test determinant ---"  << std::endl;
     std::cout << "A = " << std::endl << A;
     std::cout << "det(A) = " << A.det() << std::endl;
-    ASSERT ( A.det() - EPSILSON <= 10.31 && A.det() + EPSILSON >= 10.31 );
+    ASSERT ( A.det() - EPSILSON <= fraction(1031,100) && A.det() + EPSILSON >= fraction(1031,100) );
 	ASSERT ( I.det() == 1 && K.det() == 1 );
 
 	// A.det() == 0

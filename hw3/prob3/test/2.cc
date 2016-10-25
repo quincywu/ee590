@@ -27,7 +27,7 @@ int main ( int argc, char * argv[] ) {
         ASSERT ( O.get(i,j) == 1 );
       }
     }
-    
+
 	std::cout << "Test constructor, successful"  << std::endl;
 
     // check the copy constructor
@@ -46,7 +46,7 @@ int main ( int argc, char * argv[] ) {
       }
     }
 	std::cout << "Test copy constructor, successful"  << std::endl;
-	
+
     //check scaling
     std::cout << "---scaling---" << std::endl;
     matrix<int> C = A * 2;
@@ -69,7 +69,7 @@ int main ( int argc, char * argv[] ) {
     }
 
 	std::cout << "Test scaling, successful"  << std::endl;
-	
+
     //check addition
     std::cout << "---addition---" << std::endl;
     C = A.add(B);
@@ -97,7 +97,7 @@ int main ( int argc, char * argv[] ) {
     } catch ( matrix_exception &e ) {
         std::cout << "successfully catch error of adding matrix of 2 different size," << std::endl;
     }
-	
+
 	std::cout << "Test addition, successful"  << std::endl;
 
     //check subtraction
@@ -109,7 +109,7 @@ int main ( int argc, char * argv[] ) {
         ASSERT ( Z.get(i,j) == 0 );
       }
     }
-	
+
 	std::cout << "Test subtraction, successful"  << std::endl;
 
     // check multiplication
@@ -117,13 +117,13 @@ int main ( int argc, char * argv[] ) {
     C.set(0, 0, -53); C.set(0, 1, 63); C.set(0, 2, 36);
     C.set(1, 0, -86); C.set(1, 1, 118); C.set(1, 2, -12);
     C.set(2, 0, 4); C.set(2, 1, -66); C.set(2, 2, 37);
-	
+
     Z = A * B;
     std::cout << "C = " << std::endl << C;
     std::cout << "Z = " << std::endl << Z;
-	
+
     ASSERT ( Z == C	);
-	
+
 	std::cout << "Test multiplication, successful"  << std::endl;
 
     // check equals, less than and greater than
@@ -152,9 +152,16 @@ int main ( int argc, char * argv[] ) {
 
     // check inverse
 	std::cout << "---test inverse ---"  << std::endl;
-    B = A * (A.inverse()); // B = A * A^-1 = I
-    matrix<int> K = A.identity(3);
+    A.set(0, 0, 1); A.set(0, 1, 2); A.set(0, 2, 3);
+    A.set(1, 0, 0); A.set(1, 1, 1); A.set(1, 2, 4);
+    A.set(2, 0, 5); A.set(2, 1, 6); A.set(2, 2, 0);
 
+    B = A * (A.inverse()); // B = A * A^-1 = I
+    std::cout << "A = " << std::endl << A;
+    std::cout << "A^-1 = " << std::endl << A.inverse();
+    matrix<int> K = matrix<int>::identity(3);
+    std::cout << "B = " << std::endl << B;
+    std::cout << "K = " << std::endl << K;
     ASSERT ( K == B );
 
     std::cout << "Test inverse, successful"  << std::endl;
@@ -163,7 +170,7 @@ int main ( int argc, char * argv[] ) {
 	std::cout << "---test determinant ---"  << std::endl;
     std::cout << "A = " << std::endl << A;
     std::cout << "det(A) = " << A.det() << std::endl;
-    ASSERT ( A.det() == 10.31 );
+    ASSERT ( A.det() == 1 );
 	ASSERT ( I.det() == 1 && K.det() == 1 );
 
 	// A.det() == 0
