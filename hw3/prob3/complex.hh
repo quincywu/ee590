@@ -39,8 +39,8 @@ public:
 	complex mult ( const complex &c ) const;
 	complex divide ( const complex &c ) const;
 
-    bool equals ( const complex &c ) const { return fabs( magnitude() - c.magnitude() ) < EPSILSON; }
-	bool less_than ( const complex &c ) const { return magnitude() < c.magnitude(); }
+    bool equals ( const complex &c ) const { return (fabs( magnitude() - c.magnitude() ) <= EPSILSON ) && (fabs( c.magnitude() - magnitude() ) <= EPSILSON ); }
+	bool less_than ( const complex &c ) const { return ( magnitude() - c.magnitude() < 0 ) && ( c.magnitude() - magnitude() > 0 ) ; }
 
 	inline complex operator+(const complex &c) { return add(c); }
 	inline complex operator-(const complex &c) { complex result = c; result.real *= -1; result.img *= -1; return add(result); }

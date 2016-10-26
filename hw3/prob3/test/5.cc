@@ -1,30 +1,29 @@
 #include "test.hh"
 #include "matrix.hh"
-#include "fraction.hh"
+#include "complex.hh"
 
-#define EPSILSON fraction(1,10000)
-#define EPSILSON_DECIMAL 0.0001
+#define epsilson_complex complex(0.0001)
 
 int main ( int argc, char * argv[] ) {
 
-    // testing all constructors and method of matrix of type fraction
-
+    // testing all constructors and method of matrix of type complex
+    std::cout << std::boolalpha;
     //CONSTRUCTORS TEST
     std::cout << "---constructor test---" << std::endl;
-    matrix<fraction> A(3,3);
+    matrix<complex> A(3,3);
     std::cout << "A = " << std::endl << A;
     ASSERT ( A.rows() == 3 && A.columns() == 3 );
 
-    matrix<fraction> I = matrix<fraction>::identity(4);
+    matrix<complex> I = matrix<complex>::identity(4);
     for ( int i=0; i<4; i++ ) {
       for ( int j=0; j<4; j++ ) {
-        ASSERT ( ( i == j && I.get(i,j) == fraction(1) ) || ( i!=j && I.get(i,j) == fraction(0) ) );
+        ASSERT ( ( i == j && I.get(i,j) == 1 ) || ( i!=j && I.get(i,j) == 0 ) );
       }
     }
     std::cout << "I(4) = " << std::endl << I;
 
     // Check that a matrix of ones is a matrix of ones.
-    matrix<fraction> O = matrix<fraction>::ones(5,6);
+    matrix<complex> O = matrix<complex>::ones(5,6);
     for ( int i=0; i<5; i++ ) {
       for ( int j=0; j<6; j++ ) {
         ASSERT ( O.get(i,j) == 1 );
@@ -37,11 +36,11 @@ int main ( int argc, char * argv[] ) {
     // check the copy constructor
     std::cout << "---copy constructor---"  << std::endl;
 
-    A.set(0, 0, fraction(23,10)); A.set(0, 1, fraction(2)); A.set(0, 2, fraction(25,10));
-    A.set(1, 0, -fraction(32,10)); A.set(1, 1, fraction(12,10)); A.set(1, 2, fraction(35,10));
-    A.set(2, 0, fraction(20,10)); A.set(2, 1, fraction(-1)); A.set(2, 2, fraction(-15,10));
+    A.set(0, 0, complex(2.3,3)); A.set(0, 1, complex(2)); A.set(0, 2, complex(2.5,-5));
+    A.set(1, 0, -complex(3.2,0)); A.set(1, 1, complex(1.2,-2.4)); A.set(1, 2, complex(3.5,2));
+    A.set(2, 0, complex(2.0,1)); A.set(2, 1, complex(-1)); A.set(2, 2, complex(-1.5));
 
-    matrix<fraction> B = A;
+    matrix<complex> B = A;
     std::cout << "A = " << std::endl << A;
     std::cout << "B = " << std::endl << B;
     for ( int i=0; i<3; i++ ) {
@@ -54,12 +53,12 @@ int main ( int argc, char * argv[] ) {
 
     //check scaling
     std::cout << "---scaling---" << std::endl;
-    matrix<fraction> C = A * 2;
+    matrix<complex> C = A * 2;
     std::cout << "A = " << std::endl << A;
     std::cout << "C = " << std::endl << C;
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
-        ASSERT ( C.get(i,j) == (A.get(i,j) * fraction(2) ) );
+        ASSERT ( C.get(i,j) == (A.get(i,j) * complex(2) ) );
       }
     }
 
@@ -69,7 +68,7 @@ int main ( int argc, char * argv[] ) {
     std::cout << "C = " << std::endl << C;
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
-        ASSERT ( C.get(i,j) == (A.get(i,j) * fraction(-2.0)) );
+        ASSERT ( C.get(i,j) == (A.get(i,j) * complex(-2.0)) );
       }
     }
 
@@ -95,7 +94,7 @@ int main ( int argc, char * argv[] ) {
     std::cout << "C = " << std::endl << C;
 
     try {
-        matrix<fraction> D(3,4), E(4,5);
+        matrix<complex> D(3,4), E(4,5);
 		std::cout << "Adding matrix of different size should fail at 1.cc line 11;" << std::endl;
         A = D.add(E);
         FAIL;
@@ -103,25 +102,43 @@ int main ( int argc, char * argv[] ) {
         std::cout << "successfully catch error of adding matrix of 2 different size," << std::endl;
     }
 
+    std::cout << "Test addition, successful"  << std::endl;
 
     //check subtraction
     std::cout << "---subtraction---" << std::endl;
-    matrix<fraction> Z = A - B;
+
+    matrix<complex> Z = A - B;
     std::cout << "Z = " << std::endl << Z;
+
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
-          std::cout << "Z.get(i,j) = " << i << j << Z.get(i,j) - EPSILSON << std::endl;
-        ASSERT ( Z.get(i,j) == fraction(0) );
+         // std::cout << "Z.get(i,j) = " << i << j << " " << Z.get(i,j) - EPSILSON << std::endl;
+         ASSERT ( Z.get(i,j) == complex(0) );
       }
     }
 
-    // TODO add more test
+    Z = A - C;
+    std::cout << "Z = " << std::endl << Z;
+
+    for ( int i=0; i<3; i++ ) {
+      for ( int j=0; j<3; j++ ) {
+          //std::cout << "Z.get(i,j) = " << i << j << Z.get(i,j) - EPSILSON << std::endl;
+          ASSERT ( Z.get(i,j) == -B.get(i,j) );
+      }
+    }
+
+    std::cout << "Test subtraction, successful"  << std::endl;
 
     // check multiplication
     std::cout << "---multiplication---" << std::endl;
-    C.set(0, 0, fraction(3890,1000)); C.set(0, 1, fraction(45,10)); C.set(0, 2, fraction(9));
-    C.set(1, 0, -fraction(420,100)); C.set(1, 1, -fraction(846,100)); C.set(1, 2, -fraction(905,100));
-    C.set(2, 0, fraction(480,100)); C.set(2, 1, fraction(43,10)); C.set(2, 2, fraction(375,100));
+    A.set(0, 0, complex(-1,4)); A.set(0, 1, complex(4,6)); A.set(0, 2, complex(23,9));
+    A.set(1, 0, complex(-5,7)); A.set(1, 1, complex(-14,-7)); A.set(1, 2, complex(-4,7));
+    A.set(2, 0, complex(1,6)); A.set(2, 1, complex(4,4)); A.set(2, 2, complex(8,9));
+
+    B = A;
+    C.set(0, 0, complex(-108,137)); C.set(0, 1, complex(14,26)); C.set(0, 2, complex(-14,366));
+    C.set(1, 0, complex(50,-107)); C.set(1, 1, complex(41,206)); C.set(1, 2, complex(-168,66));
+    C.set(2, 0, complex(-119,63)); C.set(2, 1, complex(-64,14)); C.set(2, 2, complex(-92,303));
 
     Z = A * B;
     std::cout << "A = " << std::endl << A;
@@ -129,90 +146,71 @@ int main ( int argc, char * argv[] ) {
     std::cout << "C = " << std::endl << C;
     std::cout << "Z = " << std::endl << Z;
 
-    matrix<fraction> eps_3(3,3);
+    matrix<complex> eps_3(3,3);
     for ( int i=0; i<3; i++ ) {
       for ( int j=0; j<3; j++ ) {
-        eps_3.set(i,j, EPSILSON );
+        eps_3.set(i,j, epsilson_complex );
       }
     }
 
-    for ( int i=0; i<3; i++ ) {
-      for ( int j=0; j<3; j++ ) {
-        ASSERT ( Z.get(i,j) == C.get(i,j).reduce_fraction() );
+    ASSERT(Z - eps_3 <= C && Z >= C - eps_3);
+
+    std::cout.precision(17);
+    matrix<complex> twobytwo1(2,2);
+    twobytwo1.set(0, 0, complex( -14.220, -7.760));     twobytwo1.set(0, 1, complex(-4.25,7));
+    twobytwo1.set(1, 0, complex( 4.300,4.400));          twobytwo1.set(1, 1, complex(8.75,9.5));
+
+    matrix<complex> twobytwo_result = twobytwo1 * twobytwo1;
+    matrix<complex> twobytwo_answer(2,2);
+    twobytwo_answer.set(0, 0, complex(92.9158,232.0944)); twobytwo_answer.set(0, 1, complex(11.0675,-45.685));
+    twobytwo_answer.set(1, 0, complex(-31.177,-16.586)); twobytwo_answer.set(1, 1, complex(-62.7625,177.65));
+
+    std::cout << "twobytwo1 = " << std::endl << twobytwo1;
+    std::cout << "twobytwo_result = " << std::endl << twobytwo_result;
+    matrix<complex> eps_2(2,2);
+    for ( int i=0; i<2; i++ ) {
+      for ( int j=0; j<2; j++ ) {
+        eps_2.set(i,j, epsilson_complex );
       }
     }
+    for ( int i=0; i<2; i++ ) {
+      for ( int j=0; j<2; j++ ) {
+          std::cout << "ij = " << i << j << std::endl;
+          std::cout << "ij = " << twobytwo_answer.get(i,j) << std::endl;
+          std::cout << "ij = " << twobytwo_result.get(i,j) << std::endl;
+          std::cout << "ij = " << twobytwo_answer.get(i,j) - twobytwo_result.get(i,j) << std::endl;
+          std::cout << "ij = " << twobytwo_result.get(i,j) - twobytwo_result.get(i,j) << std::endl;
+          std::cout << "ij = " << (bool)( twobytwo_answer.get(i,j) - twobytwo_result.get(i,j) <= epsilson_complex ) << std::endl;
+          std::cout << "ij = " << (bool)( twobytwo_result.get(i,j) - twobytwo_result.get(i,j) <= epsilson_complex ) << std::endl;
+        ASSERT ( twobytwo_answer.get(i,j) - twobytwo_result.get(i,j) <= epsilson_complex );
+        ASSERT ( twobytwo_result.get(i,j) - twobytwo_result.get(i,j) <= epsilson_complex );
+      }
+    }
+    ASSERT(twobytwo_result - eps_2 <= twobytwo_answer && twobytwo_result >= twobytwo_answer - eps_2);
 
+
+
+
+    std::cout << "Test multiplication, successful"  << std::endl;
 
     // check equals, less than and greater than
 	std::cout << "---Test operator, equals, less than and greater than ---"  << std::endl;
+    ASSERT(Z == C);
     std::cout << "A = " << std::endl << A;
     std::cout << "B = " << std::endl << B;
-    C = matrix<fraction>::ones(3,3);
-    C.scale(5);
+    C = matrix<complex>::ones(3,3);
+    C.scale(100);
     std::cout << "C = " << std::endl << C;
     ASSERT ( A.equals(B) );
     ASSERT ( A == B );
     ASSERT ( A != C );
     ASSERT ( A >= B );
-
-    for ( int i=0; i<3; i++ ) {
-      for ( int j=0; j<3; j++ ) {
-          std::cout << "Bij = " << i << j << " "<< B.get(i,j) << std::endl;
-          std::cout << "C = "  << C.get(i,j) << std::endl;
-        ASSERT ( C.get(i,j) >= B.get(i,j).reduce_fraction() );
-      }
-    }
-
     ASSERT ( C >= B );
     ASSERT ( C > B );
     ASSERT ( A <= B );
     ASSERT ( B <= C );
     ASSERT ( A < C );
     std::cout << "Test operator, successful"  << std::endl;
-
-    // check minor
-	std::cout << "---Minor test---"  << std::endl;
-    matrix<fraction> Y = A.m_minor(0,0);
-    ASSERT ( Y.get(0,0) == fraction(12,10) && Y.get(0,1) == fraction(35,10) && Y.get(1,0) == fraction(-1) && Y.get(1,1) == fraction(-15,10) );
-
-    Y = A.m_minor(0,1);
-    ASSERT ( Y.rows() == 2 && Y.columns() == 2 && Y.get(0,0) == fraction(-32,10) && Y.get(0,1) == fraction(35,10) && Y.get(1,0) == fraction(20,10) && Y.get(1,1) == fraction(-15,10) );
-
-    Y = Y.m_minor(0,0); //A.m_minor(0,1).Y.m_minor(0,0)
-    ASSERT ( Y.rows() == 1 && Y.columns() == 1 && Y.get(0,0) == fraction(-15,10) );
-    std::cout << "Test minor, successful"  << std::endl;
-
-
-    // check inverse
-	std::cout << "---test inverse ---"  << std::endl;
-    B = A * (A.inverse()); // B = A * A^-1 = I
-    matrix<fraction> K = A.identity(3);
-
-    ASSERT ( K == B && B == K);
-
-    std::cout << "Test inverse, successful"  << std::endl;
-
-    // check determinant
-	std::cout << "---test determinant ---"  << std::endl;
-    std::cout << "A = " << std::endl << A;
-    std::cout << "det(A) = " << A.det() << std::endl;
-    ASSERT ( A.det() - EPSILSON <= fraction(1031,100) && A.det() + EPSILSON >= fraction(1031,100) );
-	ASSERT ( I.det() == 1 && K.det() == 1 );
-
-	// A.det() == 0
-	B.set(0, 0, 1); B.set(0, 1, 2); B.set(0, 2, 3);
-    B.set(1, 0, 4); B.set(1, 1, 5); B.set(1, 2, 6);
-    B.set(2, 0, 7); B.set(2, 1, 8); B.set(2, 2, 9);
-	ASSERT( B.det() == 0 );
-
-	try {
-        std::cout << "Adding matrix of different size should fail at 1.cc line 11;" << std::endl;
-		B.inverse();
-        FAIL;
-    } catch ( matrix_exception &e ) {
-        std::cout << "successfully catch error of getting inverse of det(0), singlular matrix" << std::endl;
-    }
-    std::cout << "Test determinant, successful"  << std::endl;
 
     std::cout << "All test passed successful"  << std::endl;
 

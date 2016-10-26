@@ -60,9 +60,9 @@ double complex::angle () const{
 std::ostream& operator<<(std::ostream& os, const complex &c) {
 
   if ( c.getImg() >= 0 )
-  	os << c.getReal() << "+" << c.getImg() << "i"  << std::endl;
+  	os << c.getReal() << "+" << fabs(c.getImg()) << "i";
   else
-    os << c.getReal() << "" << c.getImg() << "i" << std::endl;
+    os << c.getReal() << "" << c.getImg() << "i";
 
   return os;
 
