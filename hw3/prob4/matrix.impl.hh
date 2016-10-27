@@ -152,7 +152,7 @@ matrix<T> matrix<T>::add ( const matrix &m ) const {
 template <class T>
 matrix<T> matrix<T>::mult ( const matrix &m ) const {
 
-  if ( rows() != m.rows() || columns() != m.columns() ) {
+  if ( columns() != m.rows() ) {
     throw matrix_exception("Attemped to mult matrices with incompatible sizes");
   }
 

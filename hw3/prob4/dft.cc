@@ -21,7 +21,7 @@ dft::dft ( int num_pts ) {
 
 dft::~dft() {
 	//delete uni_matrix;
-    //delete &dft_matrix;
+    delete dft_matrix;
     //delete inverse_matrix;
 }
 
@@ -31,15 +31,16 @@ matrix<complex>& dft::transform () { //static method
     w.e_power(w);
     std::cout << "w = " << w << std::endl;
 
-    matrix<complex> temp (n);
+     dft_matrix  = new matrix<complex> (n);
 
     for ( int i=0; i<n; i++ ) {
       for ( int j=0; j<n; j++ ) {
-        temp.set(i,j, w.power( (i * j)%n ) );
+        dft_matrix->set(i,j, w.power( (i * j)%n ) );
       }
     }
-    std::cout << temp;
-    dft_matrix = &temp;
+
+    std::cout << "hereererere = " << std::endl;
+    std::cout << (matrix<complex>)*dft_matrix;
 
     return *dft_matrix;
 }
@@ -53,15 +54,15 @@ matrix<complex>  dft::compute_dft ( matrix<complex> x ){
 
     if(dft_count > 1) return *dft_matrix;
 
-    matrix<complex> X(n,1);
-
     std::cout << "x.rows = " << x.rows() << std::endl;
-
-    std::cout << "hereererere = " << std::endl;
+    std::cout << "dft rows = " << dft_matrix->rows() << std::endl;
+    std::cout << "dft columns = " << dft_matrix->columns() << std::endl;
+    std::cout << "bbbbbb = " << std::endl;
     std::cout << (matrix<complex>)*dft_matrix;
-    std::cout << "x " << x << std::endl;
 
-    X = ((matrix<complex>)*dft_matrix) * x;// nx1 matrix
+    std::cout << "x " << x << std::endl;
+    matrix<complex> X = *dft_matrix * (x);// nx1 matrix
+    dft_count ++;
 
     return X;
 }
