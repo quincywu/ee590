@@ -33,6 +33,7 @@ public:
 
 private:
     int n; // N
+    static int dft_count;
     //static matrix& uni_matrix;
     matrix<complex>* dft_matrix;
     //static matrix& inverse_matrix;

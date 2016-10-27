@@ -3,6 +3,7 @@
 #include <math.h>
 
 // DFT
+int dft::dft_count = 1;
 
 dft::dft ( int num_pts ) {
 
@@ -26,8 +27,8 @@ dft::~dft() {
 
 
 matrix<complex>& dft::transform () { //static method
-    complex w ( cos(-2*M_PI / n), sin(-2 * M_PI / n) );
-    w = w.e_power();
+    complex w ( 0, -2 * M_PI / n );
+    w.e_power(w);
     std::cout << "w = " << w << std::endl;
 
     matrix<complex> temp (n);
@@ -46,9 +47,21 @@ matrix<complex>& dft::transform () { //static method
 
 matrix<complex>  dft::compute_dft ( matrix<complex> x ){
     //make sure x is N x 1 matrix
+    if ( x.rows() != n ) {
+      throw dft_exception("Attempted to get dft of incorrect data points");
+    }
 
+    if(dft_count > 1) return *dft_matrix;
 
-    matrix<complex> X = *dft_matrix * x;// nx1 matrix
+    matrix<complex> X(n,1);
+
+    std::cout << "x.rows = " << x.rows() << std::endl;
+
+    std::cout << "hereererere = " << std::endl;
+    std::cout << (matrix<complex>)*dft_matrix;
+    std::cout << "x " << x << std::endl;
+
+    X = ((matrix<complex>)*dft_matrix) * x;// nx1 matrix
 
     return X;
 }
