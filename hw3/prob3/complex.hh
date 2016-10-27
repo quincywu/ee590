@@ -59,7 +59,7 @@ public:
 	inline bool operator>=(const complex &c) { return c.less_than(*this) || c.equals(*this); }
 
 	complex power ( int power );
-    complex e_power ();
+    complex e_power (complex &c);
 
 private:
 	double real,

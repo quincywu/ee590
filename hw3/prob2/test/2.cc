@@ -89,6 +89,14 @@ int main ( int argc, char * argv[] ) {
   std::cout << std::endl;
   std::cout << "-----" << std::endl;
 
+  A.set(0, M_PI);
+  A.e_power(A);
+
+  std::cout << "A = " << A ;
+  ASSERT ( fabs( A.getReal() - (-1) ) < EPSILSON && fabs( A.getImg() - (0) ) < EPSILSON );
+  std::cout << std::endl;
+  std::cout << "-----" << std::endl;
+
   //negate a complex
   A.set(1.1,-2.2);
   A = -A;

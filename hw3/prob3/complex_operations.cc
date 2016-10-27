@@ -60,11 +60,10 @@ complex complex::power ( int power ){
 	return result;
 }
 
-complex complex::e_power (){
+complex complex::e_power ( complex &c ){
 
-	complex result;
-	result.real = exp(real) * cos ( img );
-	result.img = sin (img);
+	c.real = exp(c.real) * cos ( c.img );
+	c.img = sin (c.img);
 
-	return result;
+	return c;
 }
