@@ -16,6 +16,7 @@ int main ( int argc, char * argv[] ) {
     dft a_dft(4);
     matrix<complex> x(4,1);
     matrix<complex> X = a_dft.compute_dft(x);
+    X = a_dft.compute_dft(x);
 
     std::cout << "All test passed successful"  << std::endl;
 

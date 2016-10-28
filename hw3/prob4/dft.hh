@@ -21,11 +21,11 @@ public:
     // The copy constructor
     dft& operator=(const dft &other);
 
-    matrix<complex>& transform (); // return nxn DFT matrix for transform, W
+    void transform (); // return nxn DFT matrix for transform, W
 
-    //static matrix uni_transform ( const matrix &m ); // returns the nxn unitary transform (the DFT matrix scaled by sqrt(n))
+    matrix<complex> compute_uni ( matrix<complex> x ); // returns the nxn unitary transform (the DFT matrix scaled by sqrt(n))
 
-    //static matrix inverse_transform ( const matrix &m ); // return inverse of transform
+    matrix<complex> inverse_transform ( const matrix &m ); // return inverse of transform
 
     matrix<complex> compute_dft ( matrix<complex> x ); // input n x 1 matrix, return X
 
@@ -34,7 +34,8 @@ public:
 private:
     int n; // N
     static int dft_count;
-    //static matrix& uni_matrix;
+    static int uni_count;
+    matrix<complex>* uni_matrix;
     matrix<complex>* dft_matrix;
     //static matrix& inverse_matrix;
 
