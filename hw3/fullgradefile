@@ -1,0 +1,47 @@
+
+
+################ STUDENT IS: wk3_repos_for_grade/quincywu ###############
+Fraction class
+
+2		v. add/sub
+
+2		vii. ==,<,>=
+
+2		viii. raise to a power
+
+2		ix. overload <<
+
+Complex class
+
+2		iv. conj
+
+2		v. mult/div
+
+2		vi. unary negation
+
+2		viii. complex power
+
+Template
+
+2		i. int
+
+2		ii. bool
+
+2		iii. fraction
+
+2		iv. complex
+
+DFT
+
+2		i. constructor
+
+1		ii. DFT matrix
+
+0		iii. unitary matrix test
+
+0		v/vi. test that applies DFT to random seq and checks inv
+
+
+###########################
+
+TOTAL SCORE = 27/32
