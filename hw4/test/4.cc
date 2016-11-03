@@ -17,6 +17,7 @@ int main ( int argc, char * argv[] ) {
   std::cout << array.stringify() << std::endl;
 
   std::cout << array.get(3)->stringify() << std::endl;
+  std::cout << array.get(3)->get(0)->stringify() << std::endl;
 
   return 0;
 

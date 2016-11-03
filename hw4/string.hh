@@ -13,6 +13,7 @@ public:
 
   String * clone() { return new String(*this); }
   void set(std::string s);
+  std::string print () { return str; };
   std::string stringify();
 
 private:

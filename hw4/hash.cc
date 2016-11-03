@@ -24,7 +24,7 @@ Hash::Hash ( const Hash &hash ) {
 
   for ( int i = 0; i < arr.length(); i ++){
       if( arr.get(i) != NULL ){
-          std::string k = arr.get(i)->stringify();
+          std::string k = ((String*)arr.get(i))->print();
           set( k, *(hash.get(k)) );
       }
 

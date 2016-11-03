@@ -24,7 +24,7 @@ public:
   virtual Object * get() { throw object_exception ("Undefined getter: get()"); }
   virtual Object * get(std::string s) { throw object_exception ("Undefined getter: get(s)"); }
   virtual Object * get(int i) { throw object_exception ("Undefined getter: get(i)"); }
-  virtual Object * get(bool b) { throw object_exception ("Undefined getter: get(b)"); }
+  //virtual Object * get(bool b) { throw object_exception ("Undefined getter: get(b)"); }
 
 };
 

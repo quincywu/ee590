@@ -47,6 +47,15 @@ int main ( int argc, char * argv[] ) {
     s.set("Resistance is futile");
     h.set("Javascript", s);
 
+    std::cout << h.stringify() << std::endl;
+    std::cout << h.get("Java")->stringify() << std::endl;
+    std::cout << h.get("Java")->get(1)->stringify()  << std::endl;
+    std::cout << h.get("Java")->get(4)->stringify()  << std::endl;
+
+    std::cout << h.get("ee590")->stringify() << std::endl;
+
+    std::cout << h.get("C++")->stringify() << std::endl;
+    std::cout << h.get("C++")->get(1)->get("adjective")->stringify() << std::endl;
 
   return 0;
 

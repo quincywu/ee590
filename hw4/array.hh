@@ -18,7 +18,7 @@ public:
   std::string stringify();
 
   int length();
-  //inline int getmax() { return max; }
+  inline int getmax() { return max; }
 
 private:
 
