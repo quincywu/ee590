@@ -12,11 +12,13 @@ int main ( int argc, char * argv[] ) {
   strStream << inFile.rdbuf();//read the file
   std::string str = strStream.str();//str holds the content of the file
 
-  Tokenizer tok(str);
+  Parser p(str);
 
-  while ( !tok.eof() ) {
-    std::cout << tok.eat() << std::endl;
-  }
+  Object * object = p.object();
+
+  std::cout << object->stringify() << std::endl;
+
+
 
   return 0;
 

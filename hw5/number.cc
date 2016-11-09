@@ -1,6 +1,21 @@
 #include "number.hh"
 
-Number::Number(double d) : value(d) {
+Number Number::divide ( const Number &n ) const {
+    if ( is_int and n.is_int ){
+        if( !(int)n.value )
+            throw NumberException ("Invalid number: division by 0.");
+        return Number((int)value / (int)n.value);
+    }else {
+        return Number(value / n.value);
+    }
+
+}
+
+Number Number::mod ( const Number &n ) const {
+    if ( is_int and n.is_int )
+        return Number( (int)value % (int)n.value);
+    else
+        return fmod(value, n.value);
 }
 
 std::string Number::stringify() {

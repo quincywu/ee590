@@ -7,10 +7,11 @@ class Token {
 
 public:
 
-  typedef enum { STRING, NUMBER, BOOLEAN, PUNCTUATION, NULLTOK } TOKEN_TYPE;
+  typedef enum { STRING, NUMBER, NUMBER_INT, BOOLEAN, PUNCTUATION, NULLTOK } TOKEN_TYPE;
 
   Token(std::string s) : str(s), token_type(STRING) {}
   Token(const char s[]) : str(s), token_type(STRING) {}
+  Token(int i) : number_int(i), token_type(NUMBER_INT) {}
   Token(double d) : number(d), token_type(NUMBER) {}
   Token(bool b) : boolean(b), token_type(BOOLEAN) {}
   Token(char c) : punctuation(c), token_type(PUNCTUATION) {}
@@ -23,10 +24,12 @@ public:
   inline bool is_string(void) { return token_type == STRING; }
   inline bool is_bool(void) { return token_type == BOOLEAN; }
   inline bool is_number(void) { return token_type == NUMBER; }
+  inline bool is_number_int(void) { return token_type == NUMBER_INT; }
   inline bool is_null(void) { return token_type == NULLTOK; }
 
   inline std::string string_val() { return str; }
   inline double number_val() { return number; }
+  inline double number_val_int() { return number_int; }
   inline bool bool_val() { return boolean; }
 
   std::string to_s ( void );
@@ -37,6 +40,7 @@ private:
 
   TOKEN_TYPE token_type;
   std::string str;
+  int number_int;
   double number;
   bool boolean;
   char punctuation;

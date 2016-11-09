@@ -26,6 +26,11 @@ private:
 
   Tokenizer tok;
 
+  Number * expression(void);
+  Number * term(void);
+  Number * factor(void);
+
+
 };
 
 #endif

@@ -85,6 +85,7 @@ Token Tokenizer::number() {
   // TODO: Accept negative numbers, and exponents like 10e3 or 16e-3.
 
   std::string s("");
+  bool isInt = true;
 
   if ( buffer[i] == '-' || buffer[i] == '+' ) {
       s += buffer[i++];
@@ -95,6 +96,7 @@ Token Tokenizer::number() {
   }
 
   if ( buffer[i] == '.' ) {
+    isInt = false;
     s += buffer[i++];
     while ( is_num(buffer[i]) ) {
       s += buffer[i++];
@@ -103,16 +105,23 @@ Token Tokenizer::number() {
 
   if ( buffer[i] == 'E' || buffer[i] == 'e' ) {
       s += buffer[i++];
-      std::cout << current() << std::endl;
+
       if ( buffer[i] == '-' || buffer[i] == '+' ) {
           s += buffer[i++];
       }
       while ( is_num(buffer[i]) ) {
         s += buffer[i++];
       }
+
+      if ( std::stod(s) - (int)std::stod(s) )
+        isInt = false;
+      else
+        isInt = true;
   }
 
-  return Token(std::stod(s));
+
+
+  return (isInt)?Token((int)std::stod(s)):Token(std::stod(s));
 
 }
 

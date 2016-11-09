@@ -1,5 +1,5 @@
 #include "parser.hh"
-#include <math.h>
+# include <cmath>
 
 Parser::Parser ( std::string str ) : tok(str) {
 }
@@ -63,81 +63,110 @@ Object * Parser::hash ( void ) {
 
 }
 
-void Parser::expression(void) {
-    if (tok.current().matches('+') || tok.current().matches('-') )
-        tok.eat();
-    term();
+Number * Parser::expression(void) {
+	Number * result = term();
+
     while (tok.current().matches('+') || tok.current().matches('-') ) {
-        tok.eat();
-        term();
+        if (tok.current().matches('+')){
+            tok.eat();
+            Number * temp = term();
+            *result = (*result + *temp);
+        }
+		if (tok.current().matches('-')){
+            tok.eat();
+            Number * temp = term();
+            *result = (*result - *temp);
+
+        }
     }
+
+	return result;
 }
 
-void Parser::term(void) {
-    factor();
-    while (tok.current().matches('*') || tok.current().matches('/') ) {
-        tok.eat();
-        factor();
+Number * Parser::term(void) {
+    Number * result = factor();
+
+    while (tok.current().matches('*') || tok.current().matches('/') || tok.current().matches('%') ) {
+        if (tok.current().matches('*')){
+            tok.eat();
+            Number * temp = term();
+            *result = ((*result) * (*temp) );
+        }else if (tok.current().matches('/')){
+            tok.eat();
+			Number * temp = term();
+            *result = ((*result) / (*temp) );
+        } else if  (tok.current().matches('%')){
+            tok.eat();
+			Number * temp = term();
+            if( result->is_integer() && temp->is_integer() )
+                *result = ((*result) % (*temp) );
+            else{
+                std::string err("Trying to do modulo with decimal number '");
+                err += result->stringify();
+                err += "' and '";
+                err += temp->stringify();
+                err += "' not acceptable in current implementation.";
+                throw ParserException(err.c_str());
+            }
+
+        }
     }
+
+	return result;
 }
 
-void Parser::factor(void) {
-    if (accept(ident)) {
-        ;
-    } else if (tok.current().is_number()) {
-        ;
+Number * Parser::factor(void) {
+
+	Number * result;
+
+    if (tok.current().is_number()) {
+        result = new Number ( tok.current().number_val() );
+        //std::cout << "this is " << result->get() << " is_integer = "<< result->is_integer() << std::endl;
+        tok.eat();
+    } else if (tok.current().is_number_int()) {
+        result = new Number ( (int)tok.current().number_val_int() );
+        //std::cout << "this is " << result->get() << " is_integer = "<< result->is_integer() << std::endl;
+        tok.eat();
     } else if (tok.current().matches('(')) {
-        expression();
-        expect(rparen);
+		tok.eat_punctuation('(');
+        result = expression();
+        tok.eat_punctuation(')'); // expect(rparen);
+
+    } else if (tok.current().matches('-')) {
+		tok.eat_punctuation('-');
+        if ( tok.current().is_number() ){
+            result = new Number ( -1 * tok.current().number_val() );
+            tok.eat();
+        } else if ( tok.current().is_number_int() ){
+            result = new Number ( -1 * (int)tok.current().number_val_int() );
+            tok.eat();
+        } else if ( tok.current().matches('(') ) {
+            tok.eat_punctuation('(');
+            result = expression();
+            *result = *result * -1;
+            tok.eat_punctuation(')');
+        } else {
+            std::string err("Factor: syntax error '");
+            err += tok.current().to_s();
+            err += "' .";
+            throw ParserException(err.c_str());
+
+            tok.eat();
+        }
+
     } else {
-        error("factor: syntax error");
-        nextsym();
+		throw ParserException("Factor: syntax error");
+        tok.eat();
     }
+
+	return result;
 }
 
 
 Object * Parser::number ( void ) {
 
-  Number * n;
-  int result;
+  return expression();
 
-
-
-
-  while ( tok.curent().is_number() ){
-      result = tok.current().number_val();
-      n = new Number( result );
-      tok.eat();
-      switch (tok.current()) {
-          case '+':
-            tok.eat_punctuation('+');
-            result += tok.current().number_val();
-            break;
-          case '-':
-            tok.eat_punctuation('-');
-            result -= tok.current().number_val();
-            break;
-
-      }
-      if ( tok.current().matches( '+' ) || tok.current().matches( '-' ) || tok.current().matches( '*' ) || tok.current().matches( '/' ) || tok.current().matches( '%' ) ) {
-
-          char kkk = tok.current().to_s().at(0);
-          result = result
-
-      }
-  }
-
-  if ( tok.current().matches( '(' ) ) {
-    tok.eat_punctuation('(');
-    number();
-    while ( !tok.current().matches(')') ) {
-
-    }
-    tok.eat_punctuation(')');
-  }
-
-
-  return n;
 }
 
 Object * Parser::null ( void ) {
@@ -163,7 +192,7 @@ Object * Parser::object ( void ) {
     return hash();
   } else if ( tok.current().matches('[') ) {
     return array();
-  } else if ( tok.current().is_number() || tok.current().matches('(') ) {
+} else if ( tok.current().is_number() || tok.current().is_number_int() || tok.current().matches('(') || tok.current().matches('-') ) {
     return number();
   } else if ( tok.current().is_null() ) {
     return null();

@@ -1,4 +1,4 @@
-CXX = g++ -std=c++11
+CXX = g++ -std=c++11 -g
 
 SOURCES = object.cc number.cc string.cc array.cc hash.cc token.cc tokenizer.cc parser.cc
 HEADERS = json.hh object.hh number.hh string.hh array.hh hash.hh token.hh tokenizer.hh parser.hh
