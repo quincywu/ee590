@@ -1,4 +1,6 @@
-Tokenizer = require('./tokenizer.js')
+tokfile = require('./tokenizer.js');
+Tokenizer = tokfile.Tokenizer;
+UserException = tokfile.UserException;
 
 function Parser(str) {
 
@@ -14,7 +16,7 @@ function Parser(str) {
       .add(/\(/)
       .add(/\)/)
       .add(/%/)
-      .add(/(\d)?(\.\d)?/)
+      .add(/((\d+(\.\d*)?)|(\d*\.\d+))([eE][\+\-]\d*)?/)
       .add(/\s/); // Add tokens here
 
 }
@@ -25,6 +27,18 @@ Parser.prototype.factor = function() {
     if (this.tokenizer.float_val()){ //is_number
         result = this.tokenizer.float_val();
         this.tokenizer.eat();
+
+        if(this.tokenizer.float_val()){
+            var ex = new UserException();
+            ex.name = "ParserException Factor";
+            ex.message = "Wrong syntax of a number follwing another number";
+            var pos = 0;
+            for (var i = 0; i < this.tokenizer.tok_index; i ++){
+                pos += this.tokenizer.tokens[i].length;
+            }
+            ex.position = pos;
+            throw ex;
+        }
     }else if (this.tokenizer.current() == '(' ) {
         this.tokenizer.eat_punctuation('(');
         result = this.exr();
@@ -33,10 +47,15 @@ Parser.prototype.factor = function() {
         this.tokenizer.eat_punctuation('-');
         result = -1 * this.factor();
     }else {
-        throw {
-            name: "Unexpected token \"" + this.tokenizer.current() + "\"",
-            position: this.tokenizer.tok_index
-        };
+        var ex = new UserException();
+        ex.name = "ParserException Factor";
+        ex.message = "Unexpected token \"" + this.tokenizer.current() + "\"";
+        var pos = 0;
+        for (var i = 0; i < this.tokenizer.tok_index; i ++){
+            pos += this.tokenizer.tokens[i].length;
+        }
+        ex.position = pos;
+        throw ex;
     }
 
     return result;
@@ -81,13 +100,17 @@ Parser.prototype.exr = function() {
 Parser.prototype.parse = function() {
   // TODO
 debugger;
-  if(!this.str)
-    throw {
-        name: "Parser empty input string",
-        position: "0"
-    };
+  if(!this.str){
+    var ex = new UserException();
+    ex.name = "ParserException Parse";
+    ex.message = "Parseing empty input string";
+    var pos = 0;
+    ex.position = pos;
+    throw ex;
+  }
 
   this.tokenizer.tokenize(this.str);
+  console.log(this.tokenizer.tokens);
 
   return this.exr();
 }

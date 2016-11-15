@@ -1,4 +1,6 @@
-Tokenizer = require('./tokenizer.js');
+tokfile = require('./tokenizer.js');
+Tokenizer = tokfile.Tokenizer;
+UserException = tokfile.UserException;
 
 /*t = new Tokenizer();
 
@@ -26,12 +28,18 @@ t.add(/\+/)
 .add(/\(/)
 .add(/\)/)
 .add(/%/)
-.add(/(\d)?(\.\d)/)
+.add(/((\d+(\.\d*)?)|(\d*\.\d+))([eE]\d*)?/)
 .add(/\s/)
- .tokenize("0.5*(-1+2/3.0)+.1+2.2.2"); // ,'m'
+ .tokenize(".1e2.2 + 1 ");
+ //.tokenize("22.22.231 + .1e11 "); // ,'m'
 
 
   while ( !t.eof() ) {
+      try{
+          t.eat_punctuation("&");
+      }catch(e){
+          console.log(e.name + ": " + e.message + " at position " + e.position);
+      }
     console.log(t.eat());
   }
 
