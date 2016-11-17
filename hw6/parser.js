@@ -16,7 +16,7 @@ function Parser(str) {
       .add(/\(/)
       .add(/\)/)
       .add(/%/)
-      .add(/((\d+(\.\d*)?)|(\d*\.\d+))([eE][\+\-]\d*)?/)
+      .add(/((\d+(\.\d*)?)|(\d*\.\d+))([eE][\+\-]?\d*)?/)
       .add(/\s/); // Add tokens here
 
 }
@@ -110,7 +110,7 @@ debugger;
   }
 
   this.tokenizer.tokenize(this.str);
-  console.log(this.tokenizer.tokens);
+  //console.log(this.tokenizer.tokens);
 
   return this.exr();
 }

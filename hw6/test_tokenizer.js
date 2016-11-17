@@ -18,6 +18,7 @@ t.add(/\[/)
 
 console.log(t.tokens);*/
 
+// test exception class
 
 t = new Tokenizer();
 
@@ -30,7 +31,7 @@ t.add(/\+/)
 .add(/%/)
 .add(/((\d+(\.\d*)?)|(\d*\.\d+))([eE]\d*)?/)
 .add(/\s/)
- .tokenize(".1e2.2 + 1 ");
+ .tokenize("q");
  //.tokenize("22.22.231 + .1e11 "); // ,'m'
 
 

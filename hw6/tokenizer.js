@@ -111,7 +111,7 @@ Tokenizer.prototype.eat_punctuation = function(c) {
 
 Tokenizer.prototype.whitespace = function() {
 
-    while ( this.tok_index < this.tokens.length && this.tok_index >= 0 && this.tokens[this.tok_index].match(/\s/) ){
+    while ( this.tokens && this.tok_index < this.tokens.length && this.tok_index >= 0 && this.tokens[this.tok_index].match(/\s/) ){
         this.tok_index ++;
     }
 
@@ -120,6 +120,13 @@ Tokenizer.prototype.whitespace = function() {
 Tokenizer.prototype.eof = function() {
 
     this.whitespace();
+    if (!this.tokens) {
+        var ex = new UserException();
+        ex.name = "Tokenizer eof";
+        ex.message = "Unexpected eof";
+        ex.position = -1;
+        throw ex;
+    }
     return this.tok_index >= this.tokens.length;
 
 }
