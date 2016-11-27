@@ -8,19 +8,19 @@ server.on('json_connection', function(jsocket) {
 
     var responses = {
       ee590: function (object){
-        console.log("handshake with " + jsocket.address().address);
-        server.clients[jsocket.address().address] = {};
+        console.log("handshake with " + jsocket.remoteAddress);
+        server.clients[jsocket.remoteAddress] = {};
         jsocket.jwrite({ "result": "ok"});
       },
 
       put: function (object) {
-        if(!server.clients[jsocket.address().address]){
+        if(!server.clients[jsocket.remoteAddress]){
             jsocket.error("not yet acquainted");
             return;
         }
         if( object && typeof object.key === 'string' && (typeof object.value === 'string' || typeof object.value === 'number' || typeof object.value === 'boolean') && typeof object.timestamp === 'number' && object.timestamp >= 0  ) {
 
-            server.clients[jsocket.address().address][object.key] = {
+            server.clients[jsocket.remoteAddress][object.key] = {
                 "value": object.value,
                 "timestamp": object.timestamp,
                 "received": Math.floor(new Date() / 1000)
@@ -31,11 +31,11 @@ server.on('json_connection', function(jsocket) {
             return;
         }
 
-        jsocket.jwrite({ result: "ok, put excuted"});
+        jsocket.jwrite({ result: "ok"});
       },
 
       get: function (object) {
-          if(!server.clients[jsocket.address().address]){
+          if(!server.clients[jsocket.remoteAddress]){
               jsocket.error("not yet acquainted");
               return;
           }
@@ -49,8 +49,8 @@ server.on('json_connection', function(jsocket) {
 
             }else if(typeof object.key == 'string') {
                 // { "value": STRING|NUMBER|BOOLEAN, "timestamp": UNIXTIME, "received": UNIXTIME }
-                if ( server.clients[jsocket.address().address] && server.clients[jsocket.address().address][object.key] )
-                    jsocket.jwrite ({ value: server.clients[jsocket.address().address][object.key] });
+                if ( server.clients[jsocket.remoteAddress] && server.clients[jsocket.remoteAddress][object.key] )
+                    jsocket.jwrite ({ value: server.clients[jsocket.remoteAddress][object.key] });
                 else {
                     jsocket.error( object.key + " does not exist." );;
                 }
@@ -67,7 +67,7 @@ server.on('json_connection', function(jsocket) {
       },
 
       end: function(object,socket) {
-        console.log( jsocket.address().address + " disconnected." );
+        console.log( jsocket.remoteAddress + " disconnected." );
         jsocket.end();
       }
 

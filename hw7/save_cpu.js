@@ -4,6 +4,9 @@ let client = jnet.JSONSocket();
 
 let counter = 0;
 
+let hostname = '';
+let port = '';
+
 function send() {
 
   setTimeout(function() {
@@ -22,7 +25,8 @@ function send() {
 
 
 
-  }, 2000 );
+
+  }, 1000 );
 
 }
 
@@ -36,7 +40,7 @@ function getsend(){
           client.jwrite({ command: "get", key:'cpu load'}, getsend);
 
         if ( counter % 3 == 2 )
-          client.jwrite({ command: "get", "key":'cpu load', "host":'::ffff:127.0.0.1'}, getsend);
+          client.jwrite({ command: "get", "key":'cpu load', "host":'::ffff:24.18.241.4'}, getsend);
 
         counter ++;
 
@@ -61,4 +65,22 @@ client.on('error', (err) => {
   throw err;
 });
 
-client.connect(8080, 'localhost');
+//client.connect(8080, '35.164.154.132');
+process.argv.forEach(function (val, index, array) {
+
+  if ( index == 2 ) {
+      // hostname
+      hostname = val;
+  }
+  if ( index == 3 ){
+      // port
+      port = val;
+
+     try{
+         client.connect(port, hostname);
+     }  catch (e) {
+         console.error('Cannot connect to server, ' + e);
+     }
+  }
+
+});
