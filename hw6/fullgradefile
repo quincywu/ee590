@@ -1,0 +1,15 @@
+
+
+################ STUDENT IS: wk6b_repos_for_grade/quincywu ###############
+2		1. Parses Integer Expressions: (4%2 +1)*9 - 3 = 6
+
+2		2. Parses Floating Point Expressions: 1.0 + 5.4/2 = 3.7
+
+2		3. Error With Appropriate Name/Position Property Thrown:
+	  1 /+ 5/2
+	  1a + 5/2
+
+
+###########################
+
+TOTAL SCORE = 6/6
