@@ -1,0 +1,1 @@
+select Track.Name, ( ( Track.Milliseconds / (1000 * 60) ) ) || ":" || printf("%02d", ((Track.Milliseconds / 1000) % 60) ) As Durations from Album inner join Track on Album.AlbumId = Track.AlbumId where Album.Title like 'Temple of the Dog';

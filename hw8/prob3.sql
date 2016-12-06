@@ -1,0 +1,1 @@
+select Customer.FirstName, Customer.LastName, sum(Invoice.Total) As Total from Invoice inner join Customer on Invoice.CustomerId = Customer.CustomerId group by Invoice.CustomerId order by Total DESC limit 10;

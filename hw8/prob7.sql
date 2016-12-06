@@ -1,0 +1,1 @@
+select ar.Name, ( sum(t.Milliseconds) / (1000 * 60) ) As 'TotalDuration(Minutes)' from Track t inner join Album a on a.AlbumId = t.AlbumId inner join Artist ar on ar.ArtistId = a.ArtistId group by ar.ArtistId order by sum(t.Milliseconds) DESC limit 10;
