@@ -1,0 +1,19 @@
+
+
+################ STUDENT IS: wk7b_repos_for_grade/quincywu ###############
+2		1. data_server Handshake
+
+2		2. data_server Puts
+
+2		3. data_server All 3 Gets
+
+2		4. save_cpu Client Program Connects and Handshakes
+
+2		5. save_cpu Client Program Puts Cpu Load
+
+1		6. save_cpu Client Tests All 3 Gets
+
+
+###########################
+
+TOTAL SCORE = 11/12
