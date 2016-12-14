@@ -15,6 +15,7 @@ var Graph = function() {
 }
 
 Graph.prototype.addEdge = function ( start, end, relationship = "") {
+
     var first = this.node_list.contains(start);
     var second = this.node_list.contains(end);
     if(first){
@@ -46,20 +47,61 @@ Graph.prototype.addEdge = function ( start, end, relationship = "") {
         }
         if( !second ){
             var node = new Node(end);
-            node.addEdge(start);
+            node.addEdge(start, relationship);
             this.node_list.push(node);
         }
     }
 }
 
-Graph.prototype.addMultEdge = function(){
+Graph.prototype.addMultEdge = function( objArray ){ // obj = {'start', 'end', 'relationship'}
+
+}
+
+Graph.prototype.deleteEdge = function( start, end, relationship = '' ){
+
+    var first = this.node_list.contains(start);
+    var second = this.node_list.contains(end);
+
+    if ( first && second ) {
+        var i = this.node_list.length;
+        while (i-- && i >= 0 ) {
+
+            if (this.node_list[i].name === start) {
+                this.node_list[i].deleteEdge(end, relationship);
+            }
+            if (this.node_list[i].name === end) {
+                this.node_list[i].deleteEdge(start, relationship);
+            }
+
+        }
+    }
+
+}
+
+Graph.prototype.deleteNode = function( node ) {
+    //delete node and all the relationship with this node
+
+    var first = this.node_list.contains(node);
+    if ( first ) {
+        var i = this.node_list.length;
+        while ( i-- && i >= 0 ) {
+            if ( this.node_list[i].name === node ){
+                delete this.node_list[i];
+            } else {
+                this.node_list[i].deleteAllEdge( node );
+            }
+
+        }
+    }
 
 }
 
 Graph.prototype.printNodes = function (){
     for(var i = 0;i < this.node_list.length;i++){
-        console.log(this.node_list[i].name +":");
-        console.log(this.node_list[i].edge_list);
+        if(this.node_list[i]){
+            console.log(this.node_list[i].name +":");
+            console.log(this.node_list[i].edge_list);
+        }
     }
 }
 
