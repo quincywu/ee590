@@ -41,7 +41,18 @@ debugger;
 
 function insertMain() {
     console.log("Insert into graph database ");
-    db.run("INSERT INTO graph VALUES (NULL, '" + tableName + "')");
+    db.serialize(function(){
+
+        db.run("INSERT INTO graph VALUES (0, 'test')", function(err, row){
+            if(err) console.log(err);
+        });
+
+        db.run("INSERT INTO graph SELECT NULL, '" + tableName + "' FROM graph WHERE NOT EXISTS ( SELECT 1 FROM graph g WHERE g.name = '" + tableName + "' ) limit 1");
+
+        db.run("DELETE FROM graph WHERE id = 0");
+    });
+
+    // db.run("INSERT INTO graph VALUES (NULL, '" + tableName + "')");
     console.log("Finish into graph database ");
 }
 
@@ -61,7 +72,7 @@ debugger;
 
         for(var i = 0; i < graph.node_list.length; i ++){
             if ( graph.node_list[i] ) {
-                db.run("INSERT INTO " + tableName + "_edge (id, node_one_id, node_two_id, relationship) VALUES (NULL, '0', '0', 'test')");
+                db.run("INSERT INTO " + tableName + "_edge (id, node_one_id, node_two_id, relationship) VALUES (0, '0', '0', 'test')");
 
                 for(var key in graph.node_list[i].edge_list){
                     if (key) {
@@ -95,8 +106,48 @@ debugger;
     console.log("DONE ");
 }
 
-Database.prototype.deleteGraph = function() {
-    
+Database.prototype.getGraph = function(){
+
+}
+
+Database.prototype.listAllRelationship = function ( nodeName, callback ) {
+    // check if node exists in db
+
+    db.all("SELECT n2.node AS node2, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE n.node like '" + nodeName + "' ", function(err, rows) {
+
+        if (err){
+            console.log('error in listing')
+            console.log(err);
+            callback("error");
+            return;
+        }
+
+        console.log( nodeName + " has relationship with [" );
+        if(rows){
+            rows.forEach( function (row) {
+                console.log(row.node2 + ": " + row.relationship);
+            });
+        }else{
+            console.log('error in listing 2');
+        }
+        console.log("]");
+        callback(rows);
+        return;
+    } );
+
+}
+
+Database.prototype.clean = function() {
+    // TODO clean all empty node
+}
+
+Database.prototype.deleteAll = function() {
+    db.run("DELETE FROM " + tableName + "_edge");
+    db.run("DELETE FROM " + tableName + "_node");
+}
+
+Database.prototype.deleteAllEdge = function() {
+    db.run("DELETE FROM " + tableName + "_edge");
 }
 
 Database.prototype.closeDb = function(){

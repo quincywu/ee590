@@ -96,6 +96,10 @@ Graph.prototype.deleteNode = function( node ) {
 
 }
 
+Graph.prototype.clean = function( node ) {
+    //TODO 
+}
+
 Graph.prototype.printNodes = function (){
     for(var i = 0;i < this.node_list.length;i++){
         if(this.node_list[i]){
