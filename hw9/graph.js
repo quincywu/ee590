@@ -28,16 +28,6 @@ Graph.prototype.addEdge = function ( start, end, relationship = "") {
             }
         }
     }
-    if(second){
-        //get end node
-        var i = this.node_list.length;
-        while (i--) {
-            if (this.node_list[i].name === end) {
-                this.node_list[i].addEdge(start, relationship);
-                break;
-            }
-        }
-    }
 
     if( (!first) || (!second) ){
         if( !first ){
@@ -47,13 +37,18 @@ Graph.prototype.addEdge = function ( start, end, relationship = "") {
         }
         if( !second ){
             var node = new Node(end);
-            node.addEdge(start, relationship);
             this.node_list.push(node);
         }
     }
 }
 
-Graph.prototype.addMultEdge = function( objArray ){ // obj = {'start', 'end', 'relationship'}
+Graph.prototype.addMultEdge = function( objArray ){ // obj = ['start', 'end', 'relationship']
+
+    for(var  i = 0 ; i < objArray; i ++){
+
+        objArray[i] = this.addEdge(objArray[i][0], objArray[i][1], objArray[i][2]);
+
+    }
 
 }
 
@@ -68,9 +63,6 @@ Graph.prototype.deleteEdge = function( start, end, relationship = '' ){
 
             if (this.node_list[i].name === start) {
                 this.node_list[i].deleteEdge(end, relationship);
-            }
-            if (this.node_list[i].name === end) {
-                this.node_list[i].deleteEdge(start, relationship);
             }
 
         }
@@ -97,7 +89,7 @@ Graph.prototype.deleteNode = function( node ) {
 }
 
 Graph.prototype.clean = function( node ) {
-    //TODO 
+    //TODO
 }
 
 Graph.prototype.printNodes = function (){

@@ -32,7 +32,7 @@ debugger;
     db.run("CREATE TABLE IF NOT EXISTS " + tableName + "_edge ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, 'node_one_id' int(11) NOT NULL, 'node_two_id' int(11) NOT NULL, 'relationship' varchar(64) NOT NULL )");
 
     db.serialize(function(){
-        db.run("CREATE TABLE IF NOT EXISTS graph ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, 'name' varchar(64) NOT NULL )");
+        db.run("CREATE TABLE IF NOT EXISTS graph ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, 'name' varchar(64) NOT NULL UNIQUE)");
         insertMain();
     });
 
@@ -47,7 +47,7 @@ function insertMain() {
             if(err) console.log(err);
         });
 
-        db.run("INSERT INTO graph SELECT NULL, '" + tableName + "' FROM graph WHERE NOT EXISTS ( SELECT 1 FROM graph g WHERE g.name = '" + tableName + "' ) limit 1");
+        db.run("INSERT OR IGNORE INTO graph SELECT NULL, '" + tableName + "' FROM graph WHERE NOT EXISTS ( SELECT 1 FROM graph g WHERE g.name = '" + tableName + "' ) limit 1");
 
         db.run("DELETE FROM graph WHERE id = 0");
     });
@@ -58,7 +58,12 @@ function insertMain() {
 
 Database.prototype.saveGraph = function ( graph ){
     console.log("insertRows ");
-debugger;
+
+    if ( !graph || !graph.node_list ) {
+        console.log("Error saving graph");
+        return;
+    }
+
     db.serialize(function() {
 
         for(var i = 0; i < graph.node_list.length; i ++){
@@ -86,7 +91,6 @@ debugger;
 
                             db.run(query1, [],
                                 function(err, row) {
-                                    console.log("hihi");
                                     if(err) console.log(err);
                                 }
                             );
@@ -107,28 +111,26 @@ debugger;
 }
 
 Database.prototype.getGraph = function(){
-
+    // TODO
 }
 
-Database.prototype.listAllRelationship = function ( nodeName, callback ) {
-    // check if node exists in db
+Database.prototype.searchNode = function( nodeName, callback ){
 
-    db.all("SELECT n2.node AS node2, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE n.node like '" + nodeName + "' ", function(err, rows) {
+    var query = "SELECT n.node AS node FROM " + tableName + "_node n WHERE n.node like '%" + nodeName + "%' ";
+
+    db.all(query, function(err, rows) {
 
         if (err){
-            console.log('error in listing')
-            console.log(err);
+            console.log('error in searchNode ' + err);
             callback("error");
             return;
         }
 
-        console.log( nodeName + " has relationship with [" );
+        console.log( nodeName + " can be found in nodes [" );
         if(rows){
             rows.forEach( function (row) {
-                console.log(row.node2 + ": " + row.relationship);
+                console.log(row.node);
             });
-        }else{
-            console.log('error in listing 2');
         }
         console.log("]");
         callback(rows);
@@ -137,8 +139,114 @@ Database.prototype.listAllRelationship = function ( nodeName, callback ) {
 
 }
 
-Database.prototype.clean = function() {
+Database.prototype.searchEdge = function( edge, callback ){
+
+    var query;
+    if(edge)
+        query = "SELECT n.node AS start, n2.node AS end, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE e.relationship like '%" + edge + "%' ";
+    else {
+        query = "SELECT n.node AS start, n2.node AS end, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE e.relationship like '' ";
+    }
+
+    db.all(query, function(err, rows) {
+
+        if (err){
+            console.log('error in searchEdge ' + err);
+            callback("error");
+            return;
+        }
+
+        console.log( edge + " can be found in edge between start and end end node [" );
+        if(rows){
+            rows.forEach( function (row) {
+                console.log("edge: " + row.relationship + ", start: " + row.start + ", end: " + row.end);
+            });
+        }
+        console.log("]");
+        callback(rows);
+        return;
+    } );
+
+}
+
+Database.prototype.listIncomingEdge = function ( nodeName, callback ) {
+
+    var query = "SELECT n.node AS node, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE n2.node like '" + nodeName + "' ";
+
+    db.all(query, function(err, rows) {
+
+        if (err){
+            console.log('error in listIncomingEdge ' + err);
+            callback("error");
+            return;
+        }
+
+        console.log( nodeName + " has incmoing edges from [" );
+        if(rows){
+            rows.forEach( function (row) {
+                console.log(row.node + ": " + row.relationship);
+            });
+        }
+        console.log("]");
+        callback(rows);
+        return;
+    } );
+
+}
+
+Database.prototype.listOutgoingEdge = function ( nodeName, callback ) {
+
+    var query = "SELECT n2.node AS node, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE n.node like '" + nodeName + "' ";
+
+    db.all(query, function(err, rows) {
+
+        if (err){
+            console.log('error in listOutgoingEdge ' + err);
+            callback("error");
+            return;
+        }
+
+        console.log( nodeName + " has outgoing edge to [" );
+        if(rows){
+            rows.forEach( function (row) {
+                console.log(row.node + ": " + row.relationship);
+            });
+        }
+        console.log("]");
+        callback(rows);
+        return;
+    } );
+}
+
+Database.prototype.listAllRelationship = function ( nodeName, callback ) {
+    // "SELECT n2.node AS node2, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE n.node like '" + nodeName + "' OR n2.node like '" + nodeName + "' "
+    var query = "SELECT n2.node AS node, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE n.node like '" + nodeName + "' UNION SELECT n.node AS node, e.relationship AS relationship FROM " + tableName + "_edge e INNER JOIN " + tableName + "_node n ON n.id = e.node_one_id INNER JOIN " + tableName + "_node n2 ON n2.id = e.node_two_id WHERE n2.node like '" + nodeName + "' ";
+
+    db.all(query, function(err, rows) {
+
+        if (err){
+            console.log('error in listing ' + err);
+            callback("error");
+            return;
+        }
+
+        console.log( nodeName + " has relationship with [" );
+        if(rows){
+            rows.forEach( function (row) {
+                console.log(row.node + ": " + row.relationship);
+            });
+        }
+        console.log("]");
+        callback(rows);
+        return;
+    } );
+
+}
+
+Database.prototype.cleanUnrelated = function() {
     // TODO clean all empty node
+    //var query = "SELECT n2.id FROM `test_edge` e RIGHT JOIN test_node n ON n.id = e.node_one_id RIGHT JOIN test_node n2 ON n2.id = e.node_two_id WHERE n.id IS NULL";
+
 }
 
 Database.prototype.deleteAll = function() {
